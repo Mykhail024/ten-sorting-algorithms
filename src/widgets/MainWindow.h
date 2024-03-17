@@ -29,6 +29,11 @@ class TestThread : public QThread
             QVector<double> keys;
             QVector<testResult> data;
         };
+        struct algorithm {
+            QString name;
+            SortFunction func;
+        };
+
     signals:
         void started();
         void finished(testResults results);
@@ -40,7 +45,7 @@ class TestThread : public QThread
     protected:
         void run() override;
     private:
-        testResult test(const QVector<double> &keys, const QString &name, int &progress, SortFunction sort);
+        testResult test(const QVector<double> &keys, const algorithm &alg, int &progress);
 
         const MainWindow *m_window;
 };

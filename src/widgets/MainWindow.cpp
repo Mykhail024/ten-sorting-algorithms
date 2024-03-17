@@ -14,6 +14,18 @@
 using namespace std::chrono;
 
 const QVector<QColor> colors = {"black", "red", "blue", "#30f930", "purple", "orange", "brown", "gray", "green", "#7f1212"};
+const QVector<TestThread::algorithm> algorithms = {
+    {"Buble", bubleSort},
+    {"Insertion", insertionSort},
+    {"Selection", selectSort},
+    {"Cycle", cycleSort},
+    {"Quick", quickSort},
+    {"Merge", mergeSort},
+    {"Gnome", gnomeSort},
+    {"Stooge", stoogeSort},
+    {"Heap", heapSort},
+    {"Pigeonhole", pigeonholeSort}
+};
 
 TestThread::TestThread(const MainWindow *window, QObject *parent) : QThread(parent)
 {
@@ -40,21 +52,14 @@ void TestThread::run()
     }
     if(result.keys.last() != stop) result.keys.push_back(stop);
 
-    const int maxProgress = (result.keys.size() * itCount * 10) + 1;
+    const int maxProgress = (result.keys.size() * itCount * algorithms.count()) + 1;
     progressMaxValChanged(maxProgress);
     progressValChanged(1);
     int currentProgress = 1;
 
-    result.data.push_back(test(result.keys, "Buble", currentProgress, bubleSort));
-    result.data.push_back(test(result.keys, "Insertion", currentProgress, insertionSort));
-    result.data.push_back(test(result.keys, "Selection", currentProgress, selectSort));
-    result.data.push_back(test(result.keys, "Cycle", currentProgress, cycleSort));
-    result.data.push_back(test(result.keys, "Quick", currentProgress, quickSort));
-    result.data.push_back(test(result.keys, "Merge", currentProgress, mergeSort));
-    result.data.push_back(test(result.keys, "Gnome", currentProgress, gnomeSort));
-    result.data.push_back(test(result.keys, "Stooge", currentProgress, stoogeSort));
-    result.data.push_back(test(result.keys, "Heap", currentProgress, heapSort));
-    result.data.push_back(test(result.keys, "Pigeonhole", currentProgress, pigeonholeSort));
+    for(const auto algorithm : algorithms) {
+        result.data.push_back(test(result.keys, algorithm, currentProgress));
+    }
 
     progressValChanged(maxProgress);
     progressTextChanged("Testing finished!");
@@ -62,7 +67,7 @@ void TestThread::run()
     emit finished(result);
 }
 
-TestThread::testResult TestThread::test(const QVector<double> &keys, const QString &name, int &progress, SortFunction sort)
+TestThread::testResult TestThread::test(const QVector<double> &keys, const algorithm &alg, int &progress)
 {
     const int itCount = m_window->m_iterationsCount->text().toInt();
     const int min = m_window->m_min->text().toInt();
@@ -73,14 +78,14 @@ TestThread::testResult TestThread::test(const QVector<double> &keys, const QStri
     for(const auto &i : keys) {
         double average = 0;
         for(size_t j = 0; j < itCount; ++j) {
-            progressTextChanged(QString("Testing %1. %2 of %3 (%4/%5)").arg(name).arg(i).arg(keys.last()).arg(j+1).arg(itCount));
+            progressTextChanged(QString("Testing %1. %2 of %3 (%4/%5)").arg(alg.name).arg(i).arg(keys.last()).arg(j+1).arg(itCount));
             progressValChanged(++progress);
             auto vec = generateVec(i, min, max);
-            average += sort(vec);
+            average += alg.func(vec);
         }
         result.push_back(average/itCount);
     }
-    return {result, name};
+    return {result, alg.name};
 }
 
 MainWindow::MainWindow()
