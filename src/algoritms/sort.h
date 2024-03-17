@@ -13,3 +13,7 @@ const size_t selectSort(std::vector<int> &vec);
 const size_t cycleSort(std::vector<int> &vec);
 const size_t quickSort(std::vector<int> &vec);
 const size_t mergeSort(std::vector<int> &vec);
+const size_t gnomeSort(std::vector<int> &vec);
+const size_t stoogeSort(std::vector<int> &vec);
+const size_t pigeonholeSort(std::vector<int> &vec);
+const size_t heapSort(std::vector<int> &vec);

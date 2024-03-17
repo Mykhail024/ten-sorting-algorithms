@@ -6,14 +6,14 @@
 
 #include <climits>
 
-#include "../../external/qcustomplot/qcustomplot.h"
+#include "qcustomplot.h"
 #include "sort.h"
 
 #include "MainWindow.h"
 
 using namespace std::chrono;
 
-const QVector<QColor> colors = {"black", "red", "blue", "#22f922", "purple"};
+const QVector<QColor> colors = {"black", "red", "blue", "#30f930", "purple", "orange", "brown", "gray", "green", "#7f1212"};
 
 TestThread::TestThread(const MainWindow *window, QObject *parent) : QThread(parent)
 {
@@ -40,7 +40,7 @@ void TestThread::run()
     }
     if(result.keys.last() != stop) result.keys.push_back(stop);
 
-    const int maxProgress = (result.keys.size() * itCount * 5) + 1;
+    const int maxProgress = (result.keys.size() * itCount * 10) + 1;
     progressMaxValChanged(maxProgress);
     progressValChanged(1);
     int currentProgress = 1;
@@ -50,6 +50,11 @@ void TestThread::run()
     result.data.push_back(test(result.keys, "Selection", currentProgress, selectSort));
     result.data.push_back(test(result.keys, "Cycle", currentProgress, cycleSort));
     result.data.push_back(test(result.keys, "Quick", currentProgress, quickSort));
+    result.data.push_back(test(result.keys, "Merge", currentProgress, mergeSort));
+    result.data.push_back(test(result.keys, "Gnome", currentProgress, gnomeSort));
+    result.data.push_back(test(result.keys, "Stooge", currentProgress, stoogeSort));
+    result.data.push_back(test(result.keys, "Heap", currentProgress, heapSort));
+    result.data.push_back(test(result.keys, "Pigeonhole", currentProgress, pigeonholeSort));
 
     progressValChanged(maxProgress);
     progressTextChanged("Testing finished!");
@@ -147,15 +152,6 @@ MainWindow::MainWindow()
 
     connect(m_min, &QLineEdit::textChanged, this, &MainWindow::validateInt);
     connect(m_max, &QLineEdit::textChanged, this, &MainWindow::validateInt);
-
-    std::vector<int> vec = {3, 5, 2, 8, 5, 10, 4, 2};
-    mergeSort(vec);
-
-    QString s;
-    for(const auto &i : vec) {
-        s.push_back(QString::number(i) + " ");
-    }
-    qDebug() << s;
 }
 
 void MainWindow::validateInt(const QString &text)
@@ -164,7 +160,7 @@ void MainWindow::validateInt(const QString &text)
     if(!lineEdit) return;
     bool ok;
     text.toInt(&ok);
-    if(!ok) lineEdit->setText(QString::number(INT_MAX));
+    if(!ok) lineEdit->setText(QString::number(INT_MAX-1));
 }
 
 void MainWindow::test()
@@ -194,13 +190,12 @@ void MainWindow::testEnd(TestThread::testResults results)
     m_plot->yAxis->setLabel("Iteration count");
     m_plot->xAxis->setLabel("Digits in Vector");
     m_plot->legend->setFillOrder(QCPLegend::foColumnsFirst);
-    m_plot->legend->setVisible(true);
 
     int colorIt = 0;
     for(const auto &vec : results.data) {
         m_plot->addGraph();
         const auto i = m_plot->graphCount()-1;
-        m_plot->graph(i)->setPen(QPen(colors[colorIt++]));
+        m_plot->graph(i)->setPen(QPen(colors[colorIt++], 2));
         m_plot->graph(i)->setData(results.keys, vec.data);
         m_plot->graph(i)->setName(vec.name);
     }
@@ -208,7 +203,12 @@ void MainWindow::testEnd(TestThread::testResults results)
     QCPLayoutGrid *subLayout = new QCPLayoutGrid;
     m_plot->plotLayout()->addElement(1, 0, subLayout);
     subLayout->setMargins(QMargins(5, 0, 5, 5));
-    subLayout->addElement(0, 0, m_plot->legend);
+
+    for (size_t i = 0; i < m_plot->legend->itemCount(); i += 4) {
+        for (size_t j = i; j < i + 4 && j < m_plot->legend->itemCount(); ++j) {
+            subLayout->addElement(i / 4, j - i, m_plot->legend->item(j));
+        }
+    }
 
     m_plot->plotLayout()->setRowStretchFactor(1, 0.001);
 

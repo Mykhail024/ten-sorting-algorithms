@@ -8,6 +8,7 @@
 #include <QLineEdit>
 #include <QProgressBar>
 #include <QThread>
+#include <qcheckbox.h>
 
 class QCustomPlot;
 class MainWindow;
@@ -75,5 +76,4 @@ class MainWindow : public QWidget
         QProgressBar *m_progressBar;
 
         TestThread *m_testThread;
-
 };

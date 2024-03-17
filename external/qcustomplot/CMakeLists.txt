@@ -14,3 +14,5 @@ add_library(${PROJECT_NAME} STATIC
 )
 
 target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Widgets Qt6::PrintSupport)
+
+target_include_directories(${PROJECT_NAME} PUBLIC .)

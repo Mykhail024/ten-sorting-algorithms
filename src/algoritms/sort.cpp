@@ -1,15 +1,20 @@
 #include "sort.h"
 #include <cstdlib>
 #include <ctime>
+#include <utility>
+#include <random>
 
 std::vector<int> generateVec(const size_t &size, const int &min, const int &max)
 {
+    if(min > max) return {};
     std::vector<int> result(size);
 
-    srand(time(0));
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(min, max);
 
-    for(size_t i = 0; i < size; i++) {
-        result.push_back(rand() % (max - min + 1) + min);
+    for(size_t i = 0; i < size; ++i) {
+        result[i] = (dis(gen));
     }
     return result;
 }
@@ -26,7 +31,7 @@ bool _isSorted(const std::vector<int> &vec)
 
 const size_t bogoSort(std::vector<int> &vec)
 {
-    if(vec.empty() || vec.size() < 2) return 0;
+    if(vec.size() < 2) return 0;
     srand(time(0));
     size_t count = 0;
 
@@ -42,7 +47,7 @@ const size_t bogoSort(std::vector<int> &vec)
 
 const size_t bozoSort(std::vector<int> &vec)
 {
-    if(vec.empty() || vec.size() < 2) return 0;
+    if(vec.size() < 2) return 0;
     srand(time(0));
     size_t count = 0;
 
@@ -56,7 +61,7 @@ const size_t bozoSort(std::vector<int> &vec)
 
 const size_t bubleSort(std::vector<int> &vec)
 {
-    if(vec.empty() || vec.size() < 2) return 0;
+    if(vec.size() < 2) return 0;
     size_t count = 0;
     for(size_t i = 0; i < vec.size(); ++i) {
         for(size_t j = 0; j < vec.size() - i - 1; ++j) {
@@ -71,7 +76,7 @@ const size_t bubleSort(std::vector<int> &vec)
 
 const size_t insertionSort(std::vector<int> &vec)
 {
-    if(vec.empty() || vec.size() < 2) return 0;
+    if(vec.size() < 2) return 0;
     size_t count = 0;
     int key, j;
     for(size_t i = 1; i < vec.size(); ++i) {
@@ -90,7 +95,7 @@ const size_t insertionSort(std::vector<int> &vec)
 
 const size_t selectSort(std::vector<int> &vec)
 {
-    if(vec.empty() || vec.size() < 2) return 0;
+    if(vec.size() < 2) return 0;
     size_t count = 0;
     for(size_t i = 0; i < vec.size(); i++) {
         size_t min = i;
@@ -109,7 +114,7 @@ const size_t selectSort(std::vector<int> &vec)
 
 const size_t cycleSort(std::vector<int> &vec)
 {
-    if(vec.empty() || vec.size() < 2) return 0;
+    if(vec.size() < 2) return 0;
     size_t count = 0;
     for(size_t i = 0; i < vec.size(); ++i) {
         int val = vec[i];
@@ -172,14 +177,18 @@ void _quickSort(std::vector<int> &vec, const size_t &start, const size_t &end, s
     if(start < end) {
         const size_t partIndex = _part(vec, start, end, count);
 
-        _quickSort(vec, start, partIndex-1, count);
-        _quickSort(vec, partIndex+1, end, count);
+        if (partIndex > 0) {
+            _quickSort(vec, start, partIndex - 1, count);
+        }
+        if (partIndex < end) {
+            _quickSort(vec, partIndex + 1, end, count);
+        }
     }
 }
 
 const size_t quickSort(std::vector<int> &vec)
 {
-    if(vec.empty() || vec.size() < 2) return 0;
+    if(vec.size() < 2) return 0;
     size_t count = 0;
     _quickSort(vec, 0, vec.size()-1, count);
     return count;
@@ -217,8 +226,125 @@ void _mergeSort(std::vector<int> &vec, const size_t &left, const size_t &right, 
 
 const size_t mergeSort(std::vector<int> &vec)
 {
-    if(vec.empty() || vec.size() < 2) return 0;
+    if(vec.size() < 2) return 0;
     size_t count = 0;
     _mergeSort(vec, 0, vec.size()-1, count);
+    return count;
+}
+
+const size_t gnomeSort(std::vector<int> &vec)
+{
+    if(vec.size() < 2) return 0;
+    size_t count = 0;
+
+    size_t i = 0;
+    size_t n = vec.size();
+    while(i < n) {
+        if(i == 0) ++i;
+        if(vec[i] >= vec[i-1]) ++i;
+        else {
+            std::swap(vec[i], vec[i-1]);
+            --i;
+            ++count;
+        }
+    }
+
+    return count;
+}
+
+void _stoogeSort(std::vector<int> &vec, const size_t &l, const  size_t &r, size_t &count)
+{
+    if(l >= r) return;
+
+    if(vec[l] > vec[r]) {
+        std::swap(vec[l], vec[r]);
+        ++count;
+    }
+
+    if(r - l + 1 > 2) {
+        size_t t = (r - l + 1) / 3;
+
+        _stoogeSort(vec, l, r-t, count);
+        _stoogeSort(vec, l + t, r, count);
+        _stoogeSort(vec, l, r-t, count);
+
+    }
+}
+
+const size_t stoogeSort(std::vector<int> &vec)
+{
+    if(vec.size() < 2) return 0;
+    size_t count = 0;
+
+    _stoogeSort(vec, 0, vec.size()-1, count);
+
+    return count;
+}
+
+const size_t pigeonholeSort(std::vector<int> &vec)
+{
+
+    if(vec.size() < 2) return 0;
+    size_t count = 0;
+
+    int min = vec[0], max = vec[0];
+    size_t n = vec.size();
+    for(size_t i = 1; i < n; ++i) {
+        if(vec[i] < min) min = vec[i];
+        if(vec[i] > max) max = vec[i];
+    }
+
+    int range = max - min + 1;
+
+    std::vector<std::vector<int>> holes(range);
+
+    for(int i = 0; i < n; ++i) {
+        holes[vec[i] - min].push_back(vec[i]);
+    }
+
+    size_t index = 0;
+    for(size_t i = 0; i < range; i++) {
+        std::vector<int>::iterator it;
+        for(it = holes[i].begin(); it != holes[i].end(); ++it) {
+            vec[index++] = *it;
+            ++count;
+        }
+    }
+
+    return count;
+}
+
+void _heapify(std::vector<int> &vec, const size_t &N, const size_t &i, size_t &count)
+{
+    size_t largest = i;
+    size_t l = 2 * i + 1;
+    size_t r = 2 * i + 2;
+
+    if(l < N && vec[l] > vec[largest]) largest = l;
+    if(r < N && vec[r] > vec[largest]) largest = r;
+
+    if(largest != i) {
+        std::swap(vec[i], vec[largest]);
+        ++count;
+
+        _heapify(vec, N, largest, count);
+    }
+}
+
+const size_t heapSort(std::vector<int> &vec)
+{
+    const size_t N = vec.size();
+    if(N < 2) return 0;
+
+    size_t count = 0;
+
+    for(long long i = N / 2 - 1; i >= 0; --i) _heapify(vec, N, i, count);
+
+    for(long long i = N - 1; i > 0; --i) {
+        std::swap(vec[0], vec[i]);
+
+        _heapify(vec, static_cast<size_t>(i), 0, count);
+    }
+
     return count;
 }
