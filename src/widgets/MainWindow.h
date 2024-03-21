@@ -23,6 +23,7 @@ class TestThread : public QThread
 
         struct testResult {
             QVector<double> data;
+            QVector<double> time;
             QString name;
         };
         struct testResults {
@@ -65,12 +66,14 @@ class MainWindow : public QWidget
 
         void setControlsEnabled(const bool &val);
 
+        QCustomPlot *m_SwapsPlot = nullptr;
+        QCustomPlot *m_TimesPlot = nullptr;
+
         QHBoxLayout *m_hlayout;
         QVBoxLayout *m_vlayout;
         QHBoxLayout *m_inputsLayout;
         QVBoxLayout *m_leftLayout;
         QVBoxLayout *m_rightLayout;
-        QCustomPlot *m_plot = nullptr;
         QPushButton *m_testButton;
         QLineEdit *m_iterationsCount;
         QLineEdit *m_startIt;
@@ -81,4 +84,6 @@ class MainWindow : public QWidget
         QProgressBar *m_progressBar;
 
         TestThread *m_testThread;
+
+        QMap<QString, QCheckBox*> m_checkboxes;
 };
