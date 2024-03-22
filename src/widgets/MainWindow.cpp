@@ -101,7 +101,6 @@ TestThread::testResult TestThread::test(const QVector<double> &keys, const algor
         }
         swaps.push_back(averageSwaps/itCount);
         times.push_back(averageTime/itCount);
-        msleep(250);
     }
     return {swaps, times, alg.name};
 }
