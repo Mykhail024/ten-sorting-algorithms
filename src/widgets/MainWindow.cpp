@@ -61,7 +61,7 @@ void TestThread::run()
         }
     }
 
-    const int maxProgress = (result.keys.size() * itCount * enabled.size()) + 1;
+    const int maxProgress = (result.keys.size() * enabled.size()) + 1;
     progressMaxValChanged(maxProgress);
     progressValChanged(1);
     int currentProgress = 1;
@@ -88,9 +88,9 @@ TestThread::testResult TestThread::test(const QVector<double> &keys, const algor
     for(const auto &i : keys) {
         double averageSwaps = 0;
         double averageTime = 0;
+        progressTextChanged(QString("Testing %1 (%2 of %3)").arg(alg.name).arg(i).arg(keys.last()));
+        progressValChanged(++progress);
         for(size_t j = 0; j < itCount; ++j) {
-            progressTextChanged(QString("Testing %1. %2 of %3 (%4/%5)").arg(alg.name).arg(i).arg(keys.last()).arg(j+1).arg(itCount));
-            progressValChanged(++progress);
             auto vec = generateVec(i, min, max);
 
             const auto start = high_resolution_clock::now();
@@ -101,6 +101,7 @@ TestThread::testResult TestThread::test(const QVector<double> &keys, const algor
         }
         swaps.push_back(averageSwaps/itCount);
         times.push_back(averageTime/itCount);
+        msleep(250);
     }
     return {swaps, times, alg.name};
 }
@@ -225,9 +226,11 @@ void MainWindow::testEnd(TestThread::testResults results)
     m_SwapsPlot = new QCustomPlot(this);
     m_SwapsPlot->setMinimumHeight(400);
     m_SwapsPlot->setMinimumWidth(400);
-    m_SwapsPlot->yAxis->setLabel("Iteration count");
+    m_SwapsPlot->yAxis->setLabel("Swaps count");
     m_SwapsPlot->xAxis->setLabel("Digits in Vector");
     m_SwapsPlot->legend->setFillOrder(QCPLegend::foColumnsFirst);
+    m_SwapsPlot->plotLayout()->insertRow(0);
+    m_SwapsPlot->plotLayout()->addElement(0, 0, new QCPTextElement(m_SwapsPlot, "Swaps count", QFont("sans", 12, QFont::Bold)));
 
     m_TimesPlot = new QCustomPlot(this);
     m_TimesPlot->setMinimumHeight(400);
@@ -235,6 +238,8 @@ void MainWindow::testEnd(TestThread::testResults results)
     m_TimesPlot->yAxis->setLabel("Time (nanoseconds)");
     m_TimesPlot->xAxis->setLabel("Digits in Vector");
     m_TimesPlot->legend->setFillOrder(QCPLegend::foColumnsFirst);
+    m_TimesPlot->plotLayout()->insertRow(0);
+    m_TimesPlot->plotLayout()->addElement(0, 0, new QCPTextElement(m_TimesPlot, "Wasted time", QFont("sans", 12, QFont::Bold)));
 
     int colorIt = 0;
     for(const auto &vec : results.data) {
@@ -254,11 +259,13 @@ void MainWindow::testEnd(TestThread::testResults results)
     }
 
     QCPLayoutGrid *subSwapsLayout = new QCPLayoutGrid;
-    m_SwapsPlot->plotLayout()->addElement(1, 0, subSwapsLayout);
+    m_SwapsPlot->plotLayout()->insertRow(2);
+    m_SwapsPlot->plotLayout()->addElement(2, 0, subSwapsLayout);
     subSwapsLayout->setMargins(QMargins(5, 0, 5, 5));
 
     QCPLayoutGrid *subTimesLayout = new QCPLayoutGrid;
-    m_TimesPlot->plotLayout()->addElement(1, 0, subTimesLayout);
+    m_TimesPlot->plotLayout()->insertRow(2);
+    m_TimesPlot->plotLayout()->addElement(2, 0, subTimesLayout);
     subTimesLayout->setMargins(QMargins(5, 0, 5, 5));
 
     for (size_t i = 0; i < m_SwapsPlot->legend->itemCount(); i += 4) {
@@ -268,10 +275,11 @@ void MainWindow::testEnd(TestThread::testResults results)
         }
     }
 
-    m_SwapsPlot->plotLayout()->setRowStretchFactor(1, 0.001);
+
+    m_SwapsPlot->plotLayout()->setRowStretchFactor(2, 0.001);
     m_SwapsPlot->rescaleAxes();
 
-    m_TimesPlot->plotLayout()->setRowStretchFactor(1, 0.001);
+    m_TimesPlot->plotLayout()->setRowStretchFactor(2, 0.001);
     m_TimesPlot->rescaleAxes();
 
     m_hlayout->addWidget(m_SwapsPlot);
