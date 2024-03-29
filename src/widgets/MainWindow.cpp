@@ -11,6 +11,8 @@
 #include "qcustomplot.h"
 #include "sort.h"
 
+#include "visual.h"
+#include "visualWidget.h"
 #include "MainWindow.h"
 
 using namespace std::chrono;
@@ -121,6 +123,8 @@ MainWindow::MainWindow()
     , m_max(new QLineEdit(this))
     , m_progressBar(new QProgressBar(this))
     , m_testThread(new TestThread(this, this))
+    , m_visBtn(new QPushButton("Visual", this))
+    , m_vis(new VisualWidget())
 {
     this->setWindowTitle("Sorting Benchmark");
 
@@ -176,6 +180,7 @@ MainWindow::MainWindow()
 
     m_vlayout->addWidget(m_progressBar);
     m_vlayout->addWidget(m_testButton, 0, Qt::AlignTop);
+    m_vlayout->addWidget(m_visBtn, 0, Qt::AlignTop);
 
     m_hlayout->addLayout(m_vlayout);
 
@@ -188,6 +193,10 @@ MainWindow::MainWindow()
 
     connect(m_min, &QLineEdit::textChanged, this, &MainWindow::validateInt);
     connect(m_max, &QLineEdit::textChanged, this, &MainWindow::validateInt);
+
+    connect(m_visBtn, &QPushButton::clicked, [&]{
+                m_vis->show();
+            });
 }
 
 void MainWindow::validateInt(const QString &text)

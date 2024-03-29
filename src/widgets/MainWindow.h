@@ -12,6 +12,8 @@
 
 class QCustomPlot;
 class MainWindow;
+class Visual;
+class VisualWidget;
 
 typedef const size_t (*SortFunction)(std::vector<int>&);
 
@@ -82,6 +84,9 @@ class MainWindow : public QWidget
         QLineEdit *m_min;
         QLineEdit *m_max;
         QProgressBar *m_progressBar;
+
+        VisualWidget *m_vis;
+        QPushButton *m_visBtn;
 
         TestThread *m_testThread;
 

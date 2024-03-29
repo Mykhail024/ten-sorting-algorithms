@@ -13,6 +13,10 @@ add_library(${PROJECT_NAME} STATIC
     MainWindow.h
     widgets.cpp
     widgets.h
+    visual.cpp
+    visual.h
+    visualWidget.cpp
+    visualWidget.h
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC .)
