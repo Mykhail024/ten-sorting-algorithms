@@ -15,11 +15,10 @@ VisualWidget::VisualWidget(QWidget *parent)
     , m_count(new QLineEdit(this))
     , m_start(new QPushButton("Start", this))
 {
-    auto *validator = new QIntValidator(0, INT_MAX, this);
-    m_delay->setValidator(validator);
-    m_count->setValidator(validator);
+    m_delay->setValidator(new QIntValidator(0, INT_MAX, this));
+    m_count->setValidator(new QIntValidator(0, 60, this));
 
-    m_layout->addWidget(m_visual, 1, Qt::AlignTop);
+    m_layout->addWidget(m_visual);
     m_layout->addWidget(new QLabel("Count:", this));
     m_layout->addWidget(m_count);
     m_layout->addWidget(new QLabel("Delay:", this));

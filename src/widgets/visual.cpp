@@ -25,12 +25,12 @@ void AlgorithmThread::run()
             pos[0] = i;
             bool swapped = false;
             for(size_t j = 0; j < size - i - 1; ++j) {
-                pos[1] = j;
-                emit onUpdate();
                 if(vec[j] > vec[j+1]) {
                     std::swap(vec[j], vec[j+1]);
                     swapped = true;
                 }
+                pos[1] = j+1;
+                emit onUpdate();
                 QThread::msleep(delay);
             }
             if(!swapped) break;
@@ -94,8 +94,13 @@ void Visual::paintEvent(QPaintEvent *e)
 {
     if(m_vec.size() == 0) return;
 
+
+    QPainter painter(this);
+
+    QFontMetrics fm(painter.font());
+    QSize maxTextSize = fm.size(Qt::TextSingleLine, QString::number(m_max));
+
     const int margins = 8;
-    const int bottom = height() - margins;
     const int top = margins;
     const int left = margins;
     const int right = width() - margins;
@@ -103,14 +108,26 @@ void Visual::paintEvent(QPaintEvent *e)
     const size_t count = m_vec.size();
     const int diff = m_max - m_min;
     const int rectWidth = (right - left - (count - 1) * spacing) / count;
+    const int bottom_text =  height() - margins;
+    const int bottom = maxTextSize.height() <= rectWidth ? bottom_text - maxTextSize.width() : bottom_text;
 
-    QPainter painter(this);
 
     int normalized, x;
     for(size_t i = 0; i < count; ++i) {
-        normalized = (m_vec[i] - (m_min-1)) * (bottom - top) / diff;
+        normalized = (m_vec[i] - (m_min-(m_max*0.01))) * (bottom - top) / diff;
         x = left + i * (rectWidth + spacing);
 
         painter.fillRect(x, qMax(bottom - normalized, top), rectWidth, qMin(normalized, bottom - top), m_pos.contains(i) ? m_active_color : m_color);
+
+        if(maxTextSize.height() <= rectWidth) {
+            painter.save();
+
+            painter.translate(x + static_cast<qreal>(rectWidth) / 2, bottom_text + margins);
+            painter.rotate(-90);
+
+            painter.drawText(0, 0, QString::number(m_vec[i]));
+
+            painter.restore();
+        }
     }
 }
