@@ -1,8 +1,9 @@
-#include "sort.h"
 #include <cstdlib>
 #include <ctime>
 #include <utility>
 #include <random>
+
+#include "sort.h"
 
 std::vector<int> generateVec(const size_t &size, const int &min, const int &max)
 {
@@ -342,6 +343,7 @@ const size_t heapSort(std::vector<int> &vec)
 
     for(long long i = N - 1; i > 0; --i) {
         std::swap(vec[0], vec[i]);
+        ++count;
 
         _heapify(vec, static_cast<size_t>(i), 0, count);
     }

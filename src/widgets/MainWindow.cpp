@@ -4,14 +4,17 @@
 #include <QThread>
 #include <QRandomGenerator>
 #include <QCheckBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QSpacerItem>
 
 #include <chrono>
 #include <climits>
 
 #include "qcustomplot.h"
 #include "sort.h"
+#include "ChangeLangDialog.h"
 
-#include "visual.h"
 #include "visualWidget.h"
 #include "MainWindow.h"
 
@@ -49,7 +52,7 @@ void TestThread::run()
 
     progressMaxValChanged(1);
     progressValChanged(1);
-    progressTextChanged("Generating keys");
+    progressTextChanged(tr("Generating keys"));
 
     for(int i = start; i <= stop; i += step) {
         result.keys.push_back(i);
@@ -71,9 +74,9 @@ void TestThread::run()
     for(const auto algorithm : enabled) {
         result.data.push_back(test(result.keys, algorithm, currentProgress));
     }
-
+    
     progressValChanged(maxProgress);
-    progressTextChanged("Testing finished!");
+    progressTextChanged(tr("Testing finished!"));
 
     emit finished(result);
 }
@@ -90,7 +93,7 @@ TestThread::testResult TestThread::test(const QVector<double> &keys, const algor
     for(const auto &i : keys) {
         double averageSwaps = 0;
         double averageTime = 0;
-        progressTextChanged(QString("Testing %1 (%2 of %3)").arg(alg.name).arg(i).arg(keys.last()));
+        progressTextChanged(QString(tr("Testing %1 (%2 of %3)")).arg(alg.name).arg(i).arg(keys.last()));
         progressValChanged(++progress);
         for(size_t j = 0; j < itCount; ++j) {
             auto vec = generateVec(i, min, max);
@@ -109,24 +112,26 @@ TestThread::testResult TestThread::test(const QVector<double> &keys, const algor
 
 MainWindow::MainWindow()
     : QWidget()
-    , m_hlayout(new QHBoxLayout(this))
-    , m_vlayout(new QVBoxLayout())
-    , m_inputsLayout(new QHBoxLayout())
-    , m_leftLayout(new QVBoxLayout())
-    , m_rightLayout(new QVBoxLayout())
-    , m_testButton(new QPushButton("Test", this))
-    , m_iterationsCount(new QLineEdit(this))
+    , m_main(new QHBoxLayout(this))
+    , m_right(new QVBoxLayout())
+    , m_left(new QVBoxLayout())
+    , m_tabMain(new QTabWidget(this))
+    , m_tabGraphs(new QTabWidget(this))
+    , m_tabTables(new QTabWidget(this))
+    , m_testButton(new QPushButton(tr("Test"), this))
     , m_startIt(new QLineEdit(this))
     , m_endIt(new QLineEdit(this))
-    , m_stepIt(new QLineEdit(this))
     , m_min(new QLineEdit(this))
     , m_max(new QLineEdit(this))
+    , m_stepIt(new QLineEdit(this))
+    , m_iterationsCount(new QLineEdit(this))
     , m_progressBar(new QProgressBar(this))
     , m_testThread(new TestThread(this, this))
-    , m_visBtn(new QPushButton("Visual", this))
+    , m_visBtn(new QPushButton(tr("Visual"), this))
     , m_vis(new VisualWidget())
+    , m_settingsBtn(new QPushButton(tr("Change Language"), this))
 {
-    this->setWindowTitle("Sorting Benchmark");
+    this->setWindowTitle(tr("Sorting Benchmark"));
 
     auto *validator = new QIntValidator(0, INT_MAX, this);
 
@@ -138,51 +143,56 @@ MainWindow::MainWindow()
     m_max->setValidator(validator);
 
     m_progressBar->setTextVisible(true);
-    m_progressBar->setFormat("Press test");
+    m_progressBar->setFormat(tr("Press test"));
     m_progressBar->setAlignment(Qt::AlignCenter);
     m_progressBar->setMinimum(0);
     m_progressBar->setMaximum(1);
     m_progressBar->setValue(1);
-    m_progressBar->setMinimumWidth(350);
+    m_right->addWidget(new QLabel(tr("Numbers on first array"), this));
+    m_right->addWidget(m_startIt);
+    m_right->addWidget(new QLabel(tr("Numbers on last array"), this));
+    m_right->addWidget(m_endIt);
+    m_right->addWidget(new QLabel(tr("Min number in array"), this));
+    m_right->addWidget(m_min);
+    m_right->addWidget(new QLabel(tr("Max number in array"), this));
+    m_right->addWidget(m_max);
+    m_right->addWidget(new QLabel(tr("Step"), this));
+    m_right->addWidget(m_stepIt);
 
-    m_leftLayout->addWidget(new QLabel("Numbers on first array", this));
-    m_leftLayout->addWidget(m_startIt);
-    m_leftLayout->addWidget(new QLabel("Numbers on last array", this));
-    m_leftLayout->addWidget(m_endIt);
-    m_leftLayout->addWidget(new QLabel("Min number in array", this));
-    m_leftLayout->addWidget(m_min);
+    m_right->addWidget(new QLabel(tr("Iteration Count"), this));
+    m_right->addWidget(m_iterationsCount);
 
-    m_rightLayout->addWidget(new QLabel("Iteration Count", this));
-    m_rightLayout->addWidget(m_iterationsCount);
-    m_rightLayout->addWidget(new QLabel("Step", this));
-    m_rightLayout->addWidget(m_stepIt);
-    m_rightLayout->addWidget(new QLabel("Max number in array", this));
-    m_rightLayout->addWidget(m_max);
-
-    m_inputsLayout->addLayout(m_leftLayout);
-    m_inputsLayout->addLayout(m_rightLayout);
-
-    m_vlayout->addLayout(m_inputsLayout);
+    QVBoxLayout *checkbox_l = new QVBoxLayout();
+    QVBoxLayout *checkbox_r = new QVBoxLayout();
+    QHBoxLayout *checkbox = new QHBoxLayout();
+    checkbox->addLayout(checkbox_l);
+    checkbox->addLayout(checkbox_r);
+    m_right->addLayout(checkbox);
 
     for(int i = 0; i < algorithms.size(); i++) {
         auto w = new QCheckBox(algorithms[i].name, this);
         m_checkboxes[algorithms[i].name] = w;
 
         if(i < algorithms.size()/2) {
-            m_leftLayout->addWidget(w);
+            checkbox_l->addWidget(w);
         } else {
-            m_rightLayout->addWidget(w);
+            checkbox_r->addWidget(w);
         }
     }
 
-    m_leftLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
-    m_rightLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    m_left->addWidget(m_tabMain);
 
-    m_vlayout->addWidget(m_progressBar);
-    m_vlayout->addWidget(m_testButton, 0, Qt::AlignTop);
-    m_vlayout->addWidget(m_visBtn, 0, Qt::AlignTop);
+    m_right->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    m_right->addWidget(m_progressBar);
+    m_right->addWidget(m_testButton, 0, Qt::AlignTop);
+    m_right->addWidget(m_visBtn, 0, Qt::AlignTop);
+    m_right->addWidget(m_settingsBtn, 0, Qt::AlignTop);
 
-    m_hlayout->addLayout(m_vlayout);
+    m_main->addLayout(m_left, 1);
+    m_main->addLayout(m_right, 0);
+
+    m_tabMain->addTab(m_tabGraphs, tr("Graph"));
+    m_tabMain->addTab(m_tabTables, tr("Table"));
 
     connect(m_testButton, &QPushButton::clicked, this, &MainWindow::test);
     connect(m_testThread, &TestThread::started, this, [&]{ setControlsEnabled(false); });
@@ -197,6 +207,22 @@ MainWindow::MainWindow()
     connect(m_visBtn, &QPushButton::clicked, [&]{
                 m_vis->show();
             });
+
+    connect(m_settingsBtn, &QPushButton::clicked, [&]{
+                ChangeLangDialog d(this);
+                d.exec();
+                if(d.result() == QDialog::Accepted) {
+                    this->close();
+                    qApp->exit(EXIT_CODE_REBOOT);
+                }
+            });
+}
+
+MainWindow::~MainWindow()
+{
+    delete m_vis;
+    m_testThread->terminate();
+    delete m_testThread;
 }
 
 void MainWindow::validateInt(const QString &text)
@@ -230,24 +256,29 @@ void MainWindow::testEnd(TestThread::testResults results)
     if(m_TimesPlot) {
         m_TimesPlot->deleteLater();
     }
+    for(auto table : m_tables) {
+        delete table;
+    }
 
     m_SwapsPlot = new QCustomPlot(this);
-    m_SwapsPlot->setMinimumHeight(400);
-    m_SwapsPlot->setMinimumWidth(400);
-    m_SwapsPlot->yAxis->setLabel("Swaps count");
-    m_SwapsPlot->xAxis->setLabel("Digits in Vector");
+    m_SwapsPlot->yAxis->setLabel(tr("Swaps count"));
+    m_SwapsPlot->xAxis->setLabel(tr("Digits in Vector"));
     m_SwapsPlot->legend->setFillOrder(QCPLegend::foColumnsFirst);
     m_SwapsPlot->plotLayout()->insertRow(0);
-    m_SwapsPlot->plotLayout()->addElement(0, 0, new QCPTextElement(m_SwapsPlot, "Swaps count", QFont("sans", 12, QFont::Bold)));
+    m_SwapsPlot->plotLayout()->addElement(0, 0, new QCPTextElement(m_SwapsPlot, tr("Swaps count"), QFont("sans", 12, QFont::Bold)));
+    m_SwapsPlot->setInteraction(QCP::iRangeZoom, true);
+    m_SwapsPlot->setInteraction(QCP::iRangeDrag, true);
 
     m_TimesPlot = new QCustomPlot(this);
     m_TimesPlot->setMinimumHeight(400);
     m_TimesPlot->setMinimumWidth(400);
-    m_TimesPlot->yAxis->setLabel("Time (nanoseconds)");
-    m_TimesPlot->xAxis->setLabel("Digits in Vector");
+    m_TimesPlot->yAxis->setLabel(tr("Time (nanoseconds)"));
+    m_TimesPlot->xAxis->setLabel(tr("Digits in Vector"));
     m_TimesPlot->legend->setFillOrder(QCPLegend::foColumnsFirst);
     m_TimesPlot->plotLayout()->insertRow(0);
-    m_TimesPlot->plotLayout()->addElement(0, 0, new QCPTextElement(m_TimesPlot, "Wasted time", QFont("sans", 12, QFont::Bold)));
+    m_TimesPlot->plotLayout()->addElement(0, 0, new QCPTextElement(m_TimesPlot, tr("Wasted time"), QFont("sans", 12, QFont::Bold)));
+    m_TimesPlot->setInteraction(QCP::iRangeZoom, true);
+    m_TimesPlot->setInteraction(QCP::iRangeDrag, true);
 
     int colorIt = 0;
     for(const auto &vec : results.data) {
@@ -283,15 +314,50 @@ void MainWindow::testEnd(TestThread::testResults results)
         }
     }
 
-
     m_SwapsPlot->plotLayout()->setRowStretchFactor(2, 0.001);
     m_SwapsPlot->rescaleAxes();
 
     m_TimesPlot->plotLayout()->setRowStretchFactor(2, 0.001);
     m_TimesPlot->rescaleAxes();
 
-    m_hlayout->addWidget(m_SwapsPlot);
-    m_hlayout->addWidget(m_TimesPlot);
+
+    const size_t rows = results.keys.size();
+    for(const auto result : results.data) {
+        auto table = new QTableWidget(this);
+        table->setRowCount(rows);
+        table->setColumnCount(3);
+        table->setHorizontalHeaderLabels({tr("Numbers count"), tr("Swaps"), tr("Time")});
+        table->verticalHeader()->setVisible(false);
+        table->setSortingEnabled(true);
+        for(size_t i = 0; i < rows; ++i) {
+            QTableWidgetItem *key = new QTableWidgetItem(QString::number(results.keys[i]));
+            QTableWidgetItem *swaps = new QTableWidgetItem(QString::number(qRound(result.data[i])));
+            const auto time_ns = result.time[i];
+            QString stime;
+
+            if (time_ns >= 1000000000) {
+                stime = QString(tr("%1 s")).arg(time_ns / 1000000000.0);
+            } else if (time_ns >= 1000000) {
+                stime = QString(tr("%1 ms")).arg(time_ns / 1000000.0);
+            } else if (time_ns >= 1000) {
+                stime = QString(tr("%1 us")).arg(time_ns / 1000.0);
+            } else {
+                stime = QString(tr("%1 ns")).arg(time_ns);
+            }
+
+            QTableWidgetItem *time = new QTableWidgetItem(stime);
+
+            table->setItem(i, 0, key);
+            table->setItem(i, 1, swaps);
+            table->setItem(i, 2, time);
+        }
+        table->resizeColumnsToContents();
+        m_tables.push_back(table);
+        m_tabTables->addTab(table, result.name);
+    }
+
+    m_tabGraphs->addTab(m_SwapsPlot, tr("Swaps"));
+    m_tabGraphs->addTab(m_TimesPlot, tr("Time"));
 
     setControlsEnabled(true);
 }

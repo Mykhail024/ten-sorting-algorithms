@@ -13,15 +13,16 @@ VisualWidget::VisualWidget(QWidget *parent)
     , m_layout(new QVBoxLayout(this))
     , m_delay(new QLineEdit(this))
     , m_count(new QLineEdit(this))
-    , m_start(new QPushButton("Start", this))
+    , m_start(new QPushButton(tr("Start"), this))
 {
+    this->setWindowTitle(tr("Visual"));
     m_delay->setValidator(new QIntValidator(0, INT_MAX, this));
     m_count->setValidator(new QIntValidator(0, 60, this));
 
     m_layout->addWidget(m_visual);
-    m_layout->addWidget(new QLabel("Count:", this));
+    m_layout->addWidget(new QLabel(tr("Count:"), this));
     m_layout->addWidget(m_count);
-    m_layout->addWidget(new QLabel("Delay:", this));
+    m_layout->addWidget(new QLabel(tr("Delay:"), this));
     m_layout->addWidget(m_delay);
     m_layout->addWidget(m_start);
 

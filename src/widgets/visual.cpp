@@ -45,7 +45,7 @@ void AlgorithmThread::run()
 Visual::Visual(QWidget *parent)
     : QWidget(parent)
     , m_thread(new AlgorithmThread(this))
-    , m_color("#242424")
+    , m_color("#202020")
     , m_active_color("#00f1f4")
     , m_pos({-1, -1})
 {

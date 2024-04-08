@@ -2,11 +2,23 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
 set(PROJECT_NAME sort.widgets)
 
+set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC ON)
 
 project(${PROJECT_NAME})
 
-find_package(Qt6 COMPONENTS Core Widgets Concurrent REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets Concurrent LinguistTools REQUIRED)
+
+set(TS_FILES
+    ts/uk_UA.ts
+    ts/en_US.ts
+)
+
+set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION "${CMAKE_BINARY_DIR}/bin/ts")
+
+qt_create_translation(TSR_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
+
+add_custom_target(translations ALL DEPENDS ${TSR_FILES})
 
 add_library(${PROJECT_NAME} STATIC
     MainWindow.cpp
@@ -17,6 +29,10 @@ add_library(${PROJECT_NAME} STATIC
     visual.h
     visualWidget.cpp
     visualWidget.h
+    ChangeLangDialog.cpp
+    ChangeLangDialog.h
+
+    ${TSR_FILES}
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC .)

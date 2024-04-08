@@ -9,6 +9,7 @@ class Visual;
 
 class VisualWidget : public QWidget
 {
+    Q_OBJECT
     public:
         VisualWidget(QWidget *parent = nullptr);
 

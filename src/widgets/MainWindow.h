@@ -8,11 +8,12 @@
 #include <QLineEdit>
 #include <QProgressBar>
 #include <QThread>
-#include <qcheckbox.h>
+#include <QCheckBox>
+#include <QTabWidget>
+#include <QTableWidget>
 
 class QCustomPlot;
 class MainWindow;
-class Visual;
 class VisualWidget;
 
 typedef const size_t (*SortFunction)(std::vector<int>&);
@@ -58,6 +59,9 @@ class MainWindow : public QWidget
     Q_OBJECT
     public:
         MainWindow();
+        ~MainWindow();
+
+        static const int EXIT_CODE_REBOOT = -123456789;
 
     public slots:
         void test();
@@ -68,14 +72,10 @@ class MainWindow : public QWidget
 
         void setControlsEnabled(const bool &val);
 
-        QCustomPlot *m_SwapsPlot = nullptr;
-        QCustomPlot *m_TimesPlot = nullptr;
+        QHBoxLayout *m_main;
+        QVBoxLayout *m_left;
+        QVBoxLayout *m_right;
 
-        QHBoxLayout *m_hlayout;
-        QVBoxLayout *m_vlayout;
-        QHBoxLayout *m_inputsLayout;
-        QVBoxLayout *m_leftLayout;
-        QVBoxLayout *m_rightLayout;
         QPushButton *m_testButton;
         QLineEdit *m_iterationsCount;
         QLineEdit *m_startIt;
@@ -88,7 +88,17 @@ class MainWindow : public QWidget
         VisualWidget *m_vis;
         QPushButton *m_visBtn;
 
+        QCustomPlot *m_SwapsPlot = nullptr;
+        QCustomPlot *m_TimesPlot = nullptr;
+        QTabWidget *m_tabMain;
+        QTabWidget *m_tabGraphs;
+        QTabWidget *m_tabTables;
+
+        QVector<QTableWidget*> m_tables;
+
         TestThread *m_testThread;
 
         QMap<QString, QCheckBox*> m_checkboxes;
+
+        QPushButton *m_settingsBtn;
 };
