@@ -9,8 +9,9 @@
 #include <QProgressBar>
 #include <QThread>
 #include <QCheckBox>
-#include <QTabWidget>
+#include <QTableView>
 #include <QTableWidget>
+#include <QItemDelegate>
 
 class QCustomPlot;
 class MainWindow;
@@ -25,7 +26,7 @@ class TestThread : public QThread
         TestThread(const MainWindow *window, QObject *parent = nullptr);
 
         struct testResult {
-            QVector<double> data;
+            QVector<double> swaps;
             QVector<double> time;
             QString name;
         };
@@ -52,6 +53,15 @@ class TestThread : public QThread
         testResult test(const QVector<double> &keys, const algorithm &alg, int &progress);
 
         const MainWindow *m_window;
+};
+
+class TimeColDelegate : public QItemDelegate 
+{
+    Q_OBJECT
+    public:
+        explicit TimeColDelegate(QObject *parent = nullptr);
+        void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+
 };
 
 class MainWindow : public QWidget
@@ -94,7 +104,8 @@ class MainWindow : public QWidget
         QTabWidget *m_tabGraphs;
         QTabWidget *m_tabTables;
 
-        QVector<QTableWidget*> m_tables;
+        QVector<QTableView*> m_tables;
+        TimeColDelegate *m_timeColDelegate = nullptr;
 
         TestThread *m_testThread;
 

@@ -4,22 +4,22 @@
 <context>
     <name>ChangeLangDialog</name>
     <message>
-        <location filename="../ChangeLangDialog.cpp" line="20"/>
+        <location filename="../ChangeLangDialog.cpp" line="18"/>
         <source>Accept</source>
         <translation>Підтвердити</translation>
     </message>
     <message>
-        <location filename="../ChangeLangDialog.cpp" line="21"/>
+        <location filename="../ChangeLangDialog.cpp" line="19"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../ChangeLangDialog.cpp" line="23"/>
+        <location filename="../ChangeLangDialog.cpp" line="21"/>
         <source>Change Language</source>
         <translation>Змінити мову</translation>
     </message>
     <message>
-        <location filename="../ChangeLangDialog.cpp" line="24"/>
+        <location filename="../ChangeLangDialog.cpp" line="22"/>
         <source>Language</source>
         <translation>Мова</translation>
     </message>
@@ -27,12 +27,12 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.cpp" line="121"/>
+        <location filename="../MainWindow.cpp" line="145"/>
         <source>Test</source>
         <translation>Тестувати</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="130"/>
+        <location filename="../MainWindow.cpp" line="154"/>
         <source>Visual</source>
         <translation>Візуальне представлення</translation>
     </message>
@@ -41,94 +41,87 @@
         <translation type="vanished">Налаштування</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="134"/>
+        <location filename="../MainWindow.cpp" line="158"/>
         <source>Sorting Benchmark</source>
         <translation>Порівняння алгоритмів сортування</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="146"/>
+        <location filename="../MainWindow.cpp" line="170"/>
         <source>Press test</source>
         <translation>Натисність тестувати</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="151"/>
+        <location filename="../MainWindow.cpp" line="175"/>
         <source>Numbers on first array</source>
         <translation>Кількість чисел в першому масиві</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="153"/>
+        <location filename="../MainWindow.cpp" line="177"/>
         <source>Numbers on last array</source>
         <translation>Кількість чисел в останньому масиві</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="155"/>
+        <location filename="../MainWindow.cpp" line="179"/>
         <source>Min number in array</source>
         <translation>Мінімальне число в масиві</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="162"/>
+        <location filename="../MainWindow.cpp" line="186"/>
         <source>Iteration Count</source>
         <translation>Кількість ітерацій</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="194"/>
+        <location filename="../MainWindow.cpp" line="218"/>
         <source>Graph</source>
         <translation>Графік</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="329"/>
-        <location filename="../MainWindow.cpp" line="359"/>
+        <location filename="../MainWindow.cpp" line="369"/>
         <source>Swaps</source>
         <translation>Перестановки</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="329"/>
-        <location filename="../MainWindow.cpp" line="360"/>
+        <location filename="../MainWindow.cpp" line="370"/>
         <source>Time</source>
         <translation>Час</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="329"/>
         <source>Numbers count</source>
-        <translation>Кількість числел</translation>
+        <translation type="vanished">Кількість числел</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="339"/>
         <source>%1 s</source>
-        <translation>%1 с</translation>
+        <translation type="vanished">%1 с</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="341"/>
         <source>%1 ms</source>
-        <translation>%1 мс</translation>
+        <translation type="vanished">%1 мс</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="343"/>
         <source>%1 us</source>
-        <translation>%1 мкс</translation>
+        <translation type="vanished">%1 мкс</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="345"/>
         <source>%1 ns</source>
-        <translation>%1 нс</translation>
+        <translation type="vanished">%1 нс</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="159"/>
+        <location filename="../MainWindow.cpp" line="183"/>
         <source>Step</source>
         <translation>Крок</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="132"/>
+        <location filename="../MainWindow.cpp" line="156"/>
         <source>Change Language</source>
         <translation>Змінити мову</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="157"/>
+        <location filename="../MainWindow.cpp" line="181"/>
         <source>Max number in array</source>
         <translation>Максимальне число в масиві</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="195"/>
+        <location filename="../MainWindow.cpp" line="219"/>
         <source>Table</source>
         <translation>Таблиця</translation>
     </message>
@@ -137,26 +130,44 @@
         <translation type="vanished">Кількість чисел</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="264"/>
-        <location filename="../MainWindow.cpp" line="268"/>
+        <location filename="../MainWindow.cpp" line="292"/>
+        <location filename="../MainWindow.cpp" line="296"/>
         <source>Swaps count</source>
         <translation>Кількість перестановок</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="265"/>
-        <location filename="../MainWindow.cpp" line="276"/>
+        <location filename="../MainWindow.cpp" line="293"/>
+        <location filename="../MainWindow.cpp" line="304"/>
         <source>Digits in Vector</source>
         <translation>Чисел в масиві</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="275"/>
+        <location filename="../MainWindow.cpp" line="303"/>
         <source>Time (nanoseconds)</source>
         <translation>Час (наносекунди)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="279"/>
+        <location filename="../MainWindow.cpp" line="307"/>
         <source>Wasted time</source>
         <translation>Витрачено часу</translation>
+    </message>
+</context>
+<context>
+    <name>Model</name>
+    <message>
+        <location filename="../Model.cpp" line="34"/>
+        <source>Numbers count</source>
+        <translation type="unfinished">Кількість числел</translation>
+    </message>
+    <message>
+        <location filename="../Model.cpp" line="35"/>
+        <source>Swaps</source>
+        <translation type="unfinished">Перестановки</translation>
+    </message>
+    <message>
+        <location filename="../Model.cpp" line="36"/>
+        <source>Time</source>
+        <translation type="unfinished">Час</translation>
     </message>
 </context>
 <context>
@@ -205,19 +216,42 @@
         <translation type="vanished">Кучою</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="55"/>
+        <location filename="../MainWindow.cpp" line="58"/>
         <source>Generating keys</source>
         <translation>Генерація ключів</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="79"/>
+        <location filename="../MainWindow.cpp" line="82"/>
         <source>Testing finished!</source>
         <translation>Тестування завершено!</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="96"/>
+        <location filename="../MainWindow.cpp" line="99"/>
         <source>Testing %1 (%2 of %3)</source>
         <translation>Тестування %1 (%2 з %3)</translation>
+    </message>
+</context>
+<context>
+    <name>TimeColDelegate</name>
+    <message>
+        <location filename="../MainWindow.cpp" line="125"/>
+        <source>%1 s</source>
+        <translation type="unfinished">%1 с</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="127"/>
+        <source>%1 ms</source>
+        <translation type="unfinished">%1 мс</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="129"/>
+        <source>%1 us</source>
+        <translation type="unfinished">%1 мкс</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="131"/>
+        <source>%1 ns</source>
+        <translation type="unfinished">%1 нс</translation>
     </message>
 </context>
 <context>

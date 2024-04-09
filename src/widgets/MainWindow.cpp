@@ -7,10 +7,13 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSpacerItem>
+#include <QTableView>
 
 #include <chrono>
 #include <climits>
+#include <qheaderview.h>
 
+#include "Model.h"
 #include "qcustomplot.h"
 #include "sort.h"
 #include "ChangeLangDialog.h"
@@ -108,6 +111,27 @@ TestThread::testResult TestThread::test(const QVector<double> &keys, const algor
         times.push_back(averageTime/itCount);
     }
     return {swaps, times, alg.name};
+}
+
+TimeColDelegate::TimeColDelegate(QObject *parent) : QItemDelegate(parent)
+{}
+
+void TimeColDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    const auto time_ns = index.data(Qt::DisplayRole).toDouble();
+    QString stime;
+
+    if (time_ns >= 1000000000) {
+        stime = QString(tr("%1 s")).arg(time_ns / 1000000000.0);
+    } else if (time_ns >= 1000000) {
+        stime = QString(tr("%1 ms")).arg(time_ns / 1000000.0);
+    } else if (time_ns >= 1000) {
+        stime = QString(tr("%1 us")).arg(time_ns / 1000.0);
+    } else {
+        stime = QString(tr("%1 ns")).arg(time_ns);
+    }
+    QRect adjustedRect = option.rect.adjusted(2, 2, -2, -2);
+    painter->drawText(adjustedRect, option.displayAlignment, stime);
 }
 
 MainWindow::MainWindow()
@@ -256,6 +280,10 @@ void MainWindow::testEnd(TestThread::testResults results)
     if(m_TimesPlot) {
         m_TimesPlot->deleteLater();
     }
+    if(m_timeColDelegate == nullptr) {
+        m_timeColDelegate = new TimeColDelegate(this);
+    }
+
     for(auto table : m_tables) {
         delete table;
     }
@@ -285,13 +313,13 @@ void MainWindow::testEnd(TestThread::testResults results)
         m_SwapsPlot->addGraph();
         auto i = m_SwapsPlot->graphCount()-1;
         m_SwapsPlot->graph(i)->setPen(QPen(colors[colorIt], 2));
-        m_SwapsPlot->graph(i)->setData(results.keys, vec.data);
+        m_SwapsPlot->graph(i)->setData(results.keys, vec.swaps, true);
         m_SwapsPlot->graph(i)->setName(vec.name);
 
         m_TimesPlot->addGraph();
         i = m_TimesPlot->graphCount()-1;
         m_TimesPlot->graph(i)->setPen(QPen(colors[colorIt], 2));
-        m_TimesPlot->graph(i)->setData(results.keys, vec.time);
+        m_TimesPlot->graph(i)->setData(results.keys, vec.time, true);
         m_TimesPlot->graph(i)->setName(vec.name);
 
         ++colorIt;
@@ -320,38 +348,20 @@ void MainWindow::testEnd(TestThread::testResults results)
     m_TimesPlot->plotLayout()->setRowStretchFactor(2, 0.001);
     m_TimesPlot->rescaleAxes();
 
-
     const size_t rows = results.keys.size();
     for(const auto result : results.data) {
-        auto table = new QTableWidget(this);
-        table->setRowCount(rows);
-        table->setColumnCount(3);
-        table->setHorizontalHeaderLabels({tr("Numbers count"), tr("Swaps"), tr("Time")});
+        auto table = new QTableView(this);
+        auto model = new Model(table);
+
+        model->setData({.keys = results.keys, .swaps = result.swaps, .time = result.time});
+        table->setModel(model);
+        table->setItemDelegateForColumn(model->columnCount()-1, m_timeColDelegate);
         table->verticalHeader()->setVisible(false);
+        table->horizontalHeader()->setVisible(true);
         table->setSortingEnabled(true);
-        for(size_t i = 0; i < rows; ++i) {
-            QTableWidgetItem *key = new QTableWidgetItem(QString::number(results.keys[i]));
-            QTableWidgetItem *swaps = new QTableWidgetItem(QString::number(qRound(result.data[i])));
-            const auto time_ns = result.time[i];
-            QString stime;
-
-            if (time_ns >= 1000000000) {
-                stime = QString(tr("%1 s")).arg(time_ns / 1000000000.0);
-            } else if (time_ns >= 1000000) {
-                stime = QString(tr("%1 ms")).arg(time_ns / 1000000.0);
-            } else if (time_ns >= 1000) {
-                stime = QString(tr("%1 us")).arg(time_ns / 1000.0);
-            } else {
-                stime = QString(tr("%1 ns")).arg(time_ns);
-            }
-
-            QTableWidgetItem *time = new QTableWidgetItem(stime);
-
-            table->setItem(i, 0, key);
-            table->setItem(i, 1, swaps);
-            table->setItem(i, 2, time);
-        }
         table->resizeColumnsToContents();
+        table->horizontalHeader()->setStretchLastSection(true);
+
         m_tables.push_back(table);
         m_tabTables->addTab(table, result.name);
     }

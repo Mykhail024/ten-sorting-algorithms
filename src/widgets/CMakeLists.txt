@@ -31,6 +31,8 @@ add_library(${PROJECT_NAME} STATIC
     visualWidget.h
     ChangeLangDialog.cpp
     ChangeLangDialog.h
+    Model.h
+    Model.cpp
 
     ${TSR_FILES}
 )
