@@ -81,12 +81,12 @@
         <translation>Графік</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="308"/>
+        <location filename="../MainWindow.cpp" line="306"/>
         <source>Swaps</source>
         <translation>Перестановки</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="309"/>
+        <location filename="../MainWindow.cpp" line="307"/>
         <source>Time</source>
         <translation>Час</translation>
     </message>
@@ -135,24 +135,24 @@
         <translation type="vanished">Кількість чисел</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="228"/>
-        <location filename="../MainWindow.cpp" line="232"/>
+        <location filename="../MainWindow.cpp" line="226"/>
+        <location filename="../MainWindow.cpp" line="230"/>
         <source>Swaps count</source>
         <translation>Кількість перестановок</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="229"/>
-        <location filename="../MainWindow.cpp" line="240"/>
+        <location filename="../MainWindow.cpp" line="227"/>
+        <location filename="../MainWindow.cpp" line="238"/>
         <source>Digits in Vector</source>
         <translation>Чисел в масиві</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="239"/>
+        <location filename="../MainWindow.cpp" line="237"/>
         <source>Time (nanoseconds)</source>
         <translation>Час (наносекунди)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="243"/>
+        <location filename="../MainWindow.cpp" line="241"/>
         <source>Wasted time</source>
         <translation>Витрачено часу</translation>
     </message>
@@ -221,17 +221,15 @@
         <translation type="vanished">Кучою</translation>
     </message>
     <message>
-        <location filename="../testThread.cpp" line="42"/>
         <source>Generating keys</source>
-        <translation>Генерація ключів</translation>
+        <translation type="vanished">Генерація ключів</translation>
     </message>
     <message>
-        <location filename="../testThread.cpp" line="66"/>
         <source>Testing finished!</source>
-        <translation>Тестування завершено!</translation>
+        <translation type="vanished">Тестування завершено!</translation>
     </message>
     <message>
-        <location filename="../testThread.cpp" line="88"/>
+        <location filename="../testThread.cpp" line="40"/>
         <source>Testing %1 (%2 of %3)</source>
         <translation>Тестування %1 (%2 з %3)</translation>
     </message>

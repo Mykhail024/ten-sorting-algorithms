@@ -97,24 +97,24 @@
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="228"/>
-        <location filename="../MainWindow.cpp" line="232"/>
+        <location filename="../MainWindow.cpp" line="226"/>
+        <location filename="../MainWindow.cpp" line="230"/>
         <source>Swaps count</source>
         <translation>Swaps count</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="229"/>
-        <location filename="../MainWindow.cpp" line="240"/>
+        <location filename="../MainWindow.cpp" line="227"/>
+        <location filename="../MainWindow.cpp" line="238"/>
         <source>Digits in Vector</source>
         <translation>Digits in Vector</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="239"/>
+        <location filename="../MainWindow.cpp" line="237"/>
         <source>Time (nanoseconds)</source>
         <translation>Time (nanoseconds)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="243"/>
+        <location filename="../MainWindow.cpp" line="241"/>
         <source>Wasted time</source>
         <translation>Wasted time</translation>
     </message>
@@ -123,12 +123,12 @@
         <translation type="vanished">Numbers count</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="308"/>
+        <location filename="../MainWindow.cpp" line="306"/>
         <source>Swaps</source>
         <translation>Swaps</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="309"/>
+        <location filename="../MainWindow.cpp" line="307"/>
         <source>Time</source>
         <translation>Time</translation>
     </message>
@@ -154,17 +154,15 @@
 <context>
     <name>TestThread</name>
     <message>
-        <location filename="../testThread.cpp" line="42"/>
         <source>Generating keys</source>
-        <translation>Generating keys</translation>
+        <translation type="vanished">Generating keys</translation>
     </message>
     <message>
-        <location filename="../testThread.cpp" line="66"/>
         <source>Testing finished!</source>
-        <translation>Testing finished!</translation>
+        <translation type="vanished">Testing finished!</translation>
     </message>
     <message>
-        <location filename="../testThread.cpp" line="88"/>
+        <location filename="../testThread.cpp" line="40"/>
         <source>Testing %1 (%2 of %3)</source>
         <translation>Testing %1 (%2 of %3)</translation>
     </message>
