@@ -3,25 +3,7 @@
 #include <QWidget>
 #include <QThread>
 
-class Visual;
-
-class AlgorithmThread : public QThread
-{
-    Q_OBJECT
-    public:
-        AlgorithmThread(Visual *parent = nullptr);
-
-    protected:
-        virtual void run() override;
-
-    signals:
-        void onUpdate();
-        void onFinish();
-        void onStart();
-
-    private:
-        Visual *m_vis;
-};
+class AlgorithmThread;
 
 class Visual : public QWidget
 {
@@ -31,8 +13,10 @@ class Visual : public QWidget
         void setVector(std::vector<int> vec);
         void setActiveColor(const QColor &color);
         void setColor(const QColor &color);
-        void start();
+        bool start();
         void setDelay(const int &delay);
+        void setThread(AlgorithmThread *thread);
+        AlgorithmThread* thread();
         std::vector<int> getResult() const;
 
     signals:
@@ -43,7 +27,7 @@ class Visual : public QWidget
 
     private:
         friend AlgorithmThread;
-        AlgorithmThread *m_thread;
+        AlgorithmThread *m_thread = nullptr;
         QColor m_color, m_active_color;
         int m_min, m_max;
         std::vector<int> m_vec;

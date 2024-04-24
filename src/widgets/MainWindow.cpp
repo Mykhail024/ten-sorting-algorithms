@@ -9,109 +9,24 @@
 #include <QSpacerItem>
 #include <QTableView>
 
-#include <chrono>
 #include <climits>
 #include <qheaderview.h>
 
-#include "Model.h"
 #include "qcustomplot.h"
+#include "model.h"
 #include "sort.h"
-#include "ChangeLangDialog.h"
+#include "testThread.h"
+#include "changeLangDialog.h"
 
 #include "visualWidget.h"
 #include "MainWindow.h"
 
-using namespace std::chrono;
-
 const QVector<QColor> colors = {"black", "red", "blue", "#30f930", "purple", "orange", "brown", "gray", "green", "#7f1212"};
-const QVector<TestThread::algorithm> algorithms = {
-    {"Buble", bubleSort},
-    {"Insertion", insertionSort},
-    {"Selection", selectSort},
-    {"Cycle", cycleSort},
-    {"Quick", quickSort},
-    {"Merge", mergeSort},
-    {"Gnome", gnomeSort},
-    {"Stooge", stoogeSort},
-    {"Heap", heapSort},
-    {"Pigeonhole", pigeonholeSort}
+
+enum SOURCE {
+    FROM_TEXT_FILE = 0,
+    RANDOM_GENERATED = 1
 };
-
-TestThread::TestThread(const MainWindow *window, QObject *parent) : QThread(parent)
-{
-    m_window = window;
-}
-
-void TestThread::run()
-{
-    emit started();
-
-    const int start = m_window->m_startIt->text().toInt();
-    const int stop = m_window->m_endIt->text().toInt();
-    const int step = m_window->m_stepIt->text().toInt();
-    const int itCount = m_window->m_iterationsCount->text().toInt();
-
-    testResults result;
-
-    progressMaxValChanged(1);
-    progressValChanged(1);
-    progressTextChanged(tr("Generating keys"));
-
-    for(int i = start; i <= stop; i += step) {
-        result.keys.push_back(i);
-    }
-    if(result.keys.last() != stop) result.keys.push_back(stop);
-
-    QVector<TestThread::algorithm> enabled;
-    for(const auto &algorithm : algorithms) {
-        if(m_window->m_checkboxes[algorithm.name]->isChecked()) {
-            enabled.push_back(algorithm);
-        }
-    }
-
-    const int maxProgress = (result.keys.size() * enabled.size()) + 1;
-    progressMaxValChanged(maxProgress);
-    progressValChanged(1);
-    int currentProgress = 1;
-
-    for(const auto algorithm : enabled) {
-        result.data.push_back(test(result.keys, algorithm, currentProgress));
-    }
-    
-    progressValChanged(maxProgress);
-    progressTextChanged(tr("Testing finished!"));
-
-    emit finished(result);
-}
-
-TestThread::testResult TestThread::test(const QVector<double> &keys, const algorithm &alg, int &progress)
-{
-    const int itCount = m_window->m_iterationsCount->text().toInt();
-    const int min = m_window->m_min->text().toInt();
-    const int max = m_window->m_max->text().toInt();
-
-    QVector<double> swaps;
-    QVector<double> times;
-
-    for(const auto &i : keys) {
-        double averageSwaps = 0;
-        double averageTime = 0;
-        progressTextChanged(QString(tr("Testing %1 (%2 of %3)")).arg(alg.name).arg(i).arg(keys.last()));
-        progressValChanged(++progress);
-        for(size_t j = 0; j < itCount; ++j) {
-            auto vec = generateVec(i, min, max);
-
-            const auto start = high_resolution_clock::now();
-            averageSwaps += alg.func(vec);
-            const auto stop = high_resolution_clock::now();
-
-            averageTime += duration_cast<nanoseconds>(stop - start).count();
-        }
-        swaps.push_back(averageSwaps/itCount);
-        times.push_back(averageTime/itCount);
-    }
-    return {swaps, times, alg.name};
-}
 
 TimeColDelegate::TimeColDelegate(QObject *parent) : QItemDelegate(parent)
 {}
@@ -154,6 +69,7 @@ MainWindow::MainWindow()
     , m_visBtn(new QPushButton(tr("Visual"), this))
     , m_vis(new VisualWidget())
     , m_settingsBtn(new QPushButton(tr("Change Language"), this))
+    , m_dataSource(new QComboBox(this))
 {
     this->setWindowTitle(tr("Sorting Benchmark"));
 
@@ -166,12 +82,16 @@ MainWindow::MainWindow()
     m_min->setValidator(validator);
     m_max->setValidator(validator);
 
+    m_dataSource->addItems({"Text file", "Random generate"});
+
     m_progressBar->setTextVisible(true);
     m_progressBar->setFormat(tr("Press test"));
     m_progressBar->setAlignment(Qt::AlignCenter);
     m_progressBar->setMinimum(0);
     m_progressBar->setMaximum(1);
     m_progressBar->setValue(1);
+    m_right->addWidget(new QLabel(tr("Data source"), this));
+    m_right->addWidget(m_dataSource);
     m_right->addWidget(new QLabel(tr("Numbers on first array"), this));
     m_right->addWidget(m_startIt);
     m_right->addWidget(new QLabel(tr("Numbers on last array"), this));
@@ -240,6 +160,7 @@ MainWindow::MainWindow()
                     qApp->exit(EXIT_CODE_REBOOT);
                 }
             });
+    connect(m_dataSource, &QComboBox::currentIndexChanged, this, &MainWindow::onSourceChanged);
 }
 
 MainWindow::~MainWindow()
@@ -247,6 +168,15 @@ MainWindow::~MainWindow()
     delete m_vis;
     m_testThread->terminate();
     delete m_testThread;
+}
+
+void MainWindow::onSourceChanged(const int &source)
+{
+    if(source == RANDOM_GENERATED) {
+        
+    } else if (source == FROM_TEXT_FILE) {
+
+    }
 }
 
 void MainWindow::validateInt(const QString &text)
@@ -260,19 +190,23 @@ void MainWindow::validateInt(const QString &text)
 
 void MainWindow::test()
 {
-    if(m_iterationsCount->text().isEmpty()
-            || m_startIt->text().isEmpty()
-            || m_endIt->text().isEmpty()
-            || m_stepIt->text().isEmpty()
-            || m_min->text().isEmpty()
-            || m_max->text().isEmpty()
-            ) return;
+    const int sourceIndex = m_dataSource->currentIndex();
+    if(sourceIndex == RANDOM_GENERATED) {
+        if(m_iterationsCount->text().isEmpty()
+                || m_startIt->text().isEmpty()
+                || m_endIt->text().isEmpty()
+                || m_stepIt->text().isEmpty()
+                || m_min->text().isEmpty()
+                || m_max->text().isEmpty()
+          ) return;
+    } else if (sourceIndex == FROM_TEXT_FILE) {
+    }
 
     m_testThread->start(QThread::HighestPriority);
 }
 
 
-void MainWindow::testEnd(TestThread::testResults results)
+void MainWindow::testEnd(testResults results)
 {
     if(m_SwapsPlot) {
         m_SwapsPlot->deleteLater();
@@ -309,7 +243,7 @@ void MainWindow::testEnd(TestThread::testResults results)
     m_TimesPlot->setInteraction(QCP::iRangeDrag, true);
 
     int colorIt = 0;
-    for(const auto &vec : results.data) {
+    for(const auto &vec : results.results) {
         m_SwapsPlot->addGraph();
         auto i = m_SwapsPlot->graphCount()-1;
         m_SwapsPlot->graph(i)->setPen(QPen(colors[colorIt], 2));
@@ -348,8 +282,11 @@ void MainWindow::testEnd(TestThread::testResults results)
     m_TimesPlot->plotLayout()->setRowStretchFactor(2, 0.001);
     m_TimesPlot->rescaleAxes();
 
+    connect(m_SwapsPlot, &QCustomPlot::legendClick, this, &MainWindow::onGraphLegendClicked);
+    connect(m_TimesPlot, &QCustomPlot::legendClick, this, &MainWindow::onGraphLegendClicked);
+
     const size_t rows = results.keys.size();
-    for(const auto result : results.data) {
+    for(const auto result : results.results) {
         auto table = new QTableView(this);
         auto model = new Model(table);
 
@@ -359,8 +296,8 @@ void MainWindow::testEnd(TestThread::testResults results)
         table->verticalHeader()->setVisible(false);
         table->horizontalHeader()->setVisible(true);
         table->setSortingEnabled(true);
-        table->resizeColumnsToContents();
         table->horizontalHeader()->setStretchLastSection(true);
+        table->resizeColumnsToContents();
 
         m_tables.push_back(table);
         m_tabTables->addTab(table, result.name);
@@ -370,6 +307,21 @@ void MainWindow::testEnd(TestThread::testResults results)
     m_tabGraphs->addTab(m_TimesPlot, tr("Time"));
 
     setControlsEnabled(true);
+}
+
+const QColor enabled(QStringLiteral("#000000"));
+const QColor disabled(QStringLiteral("#707070"));
+void MainWindow::onGraphLegendClicked(QCPLegend *legend, QCPAbstractLegendItem *legendItem, QMouseEvent *event)
+{
+    if (auto plItem = qobject_cast<QCPPlottableLegendItem*>(legendItem))
+    {
+        bool newState = !plItem->plottable()->visible();
+        plItem->plottable()->setVisible(newState);
+        legendItem->setTextColor(newState ? enabled : disabled);
+        if(auto plot = qobject_cast<QCustomPlot*>(sender())) {
+            plot->replot();
+        }
+    }
 }
 
 void MainWindow::setControlsEnabled(const bool &val)

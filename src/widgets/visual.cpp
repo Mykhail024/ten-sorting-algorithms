@@ -2,59 +2,16 @@
 #include <QPainter>
 #include <algorithm>
 
+#include "algorithmThread.h"
+
 #include "visual.h"
-
-
-AlgorithmThread::AlgorithmThread(Visual *parent) : QThread(parent), m_vis(parent)
-{
-}
-
-void AlgorithmThread::run()
-{
-    emit onStart();
-    auto &vec = m_vis->m_vec;
-    auto &pos = m_vis->m_pos;
-    auto &delay = m_vis->m_delay;
-    const size_t size = vec.size();
-
-    if(vec.size() > 1) {
-        if(pos.size() != 2) {
-            pos.resize(2);
-        }
-        for(size_t i = 0; i < size-1; ++i) {
-            pos[0] = i;
-            bool swapped = false;
-            for(size_t j = 0; j < size - i - 1; ++j) {
-                if(vec[j] > vec[j+1]) {
-                    std::swap(vec[j], vec[j+1]);
-                    swapped = true;
-                }
-                pos[1] = j+1;
-                emit onUpdate();
-                QThread::msleep(delay);
-            }
-            if(!swapped) break;
-        }
-        pos.clear();
-        emit onUpdate();
-    }
-
-    emit onFinish();
-}
 
 Visual::Visual(QWidget *parent)
     : QWidget(parent)
-    , m_thread(new AlgorithmThread(this))
     , m_color("#202020")
     , m_active_color("#00f1f4")
     , m_pos({-1, -1})
 {
-    connect(m_thread, &AlgorithmThread::onUpdate, this, [&]{
-                update();
-            });
-    connect(m_thread, &AlgorithmThread::onFinish, this, [&]{
-                emit onFinish();
-            });
 }
 
 void Visual::setDelay(const int &delay)
@@ -70,9 +27,14 @@ void Visual::setVector(std::vector<int> vec)
     m_max = *max;
 }
 
-void Visual::start()
+bool Visual::start()
 {
+    if(m_thread == nullptr) {
+        qDebug() << "Null Thread!";
+        return false;
+    }
     m_thread->start();
+    return true;
 }
 
 std::vector<int> Visual::getResult() const
@@ -130,4 +92,30 @@ void Visual::paintEvent(QPaintEvent *e)
             painter.restore();
         }
     }
+}
+
+void Visual::setThread(AlgorithmThread *thread)
+{
+    if(thread == nullptr) {
+        qDebug() << "Null Thread!";
+    } else {
+        if(m_thread != nullptr) {
+            if(m_thread->isRunning()) {
+                m_thread->terminate();
+            }
+            delete m_thread;
+        }
+        m_thread = thread;
+        connect(m_thread, &AlgorithmThread::onUpdate, this, [&]{
+                update();
+                });
+        connect(m_thread, &AlgorithmThread::onFinish, this, [&]{
+                emit onFinish();
+                });
+    }
+}
+
+AlgorithmThread* Visual::thread()
+{
+    return m_thread;
 }

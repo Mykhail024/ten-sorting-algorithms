@@ -20,20 +20,19 @@ qt_create_translation(TSR_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
 
 add_custom_target(translations ALL DEPENDS ${TSR_FILES})
 
+file(GLOB ALGORITHM_THREADS "./algorithmThreads/*.cpp")
+
 add_library(${PROJECT_NAME} STATIC
     MainWindow.cpp
-    MainWindow.h
     widgets.cpp
-    widgets.h
     visual.cpp
-    visual.h
+    algorithmThread.cpp
     visualWidget.cpp
-    visualWidget.h
-    ChangeLangDialog.cpp
-    ChangeLangDialog.h
-    Model.h
-    Model.cpp
+    changeLangDialog.cpp
+    model.cpp
+    testThread.cpp
 
+    ${ALGORITHM_THREADS}
     ${TSR_FILES}
 )
 

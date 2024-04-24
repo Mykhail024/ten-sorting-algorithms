@@ -8,7 +8,7 @@
 #include <QCoreApplication>
 #include <QSettings>
 
-#include "ChangeLangDialog.h"
+#include "changeLangDialog.h"
 
 ChangeLangDialog::ChangeLangDialog(QWidget *parent)
     : QDialog(parent)
