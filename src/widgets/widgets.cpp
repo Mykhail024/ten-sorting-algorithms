@@ -3,7 +3,7 @@
 #include <QSettings>
 #include <QProcess>
 
-#include "MainWindow.h"
+#include "mainWindow.h"
 #include "widgets.h"
 
 int _showApp(int argc, char **argv)

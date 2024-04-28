@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QVector>
+#include <QVector>
 #include <QThread>
 
 #include "sort.h"
@@ -9,43 +10,43 @@ class MainWindow;
 
 typedef const size_t (*SortFunction)(std::vector<int>&);
 
-struct testResult {
-    QVector<double> swaps;
-    QVector<double> time;
-    QString name;
-};
-struct testResults {
-    QVector<double> keys;
-    QVector<testResult> results;
-};
-struct testAlgorithm {
-    QString name;
-    SortFunction func;
+const int ALGORITHMS_COUNT =  10;
+enum ALGORITHMS {
+    ERROR,
+    BUBLE,
+    INSERTION,
+    SELECTION,
+    CYCLE,
+    QUICK,
+    MERGE,
+    GNOME,
+    STOOGE,
+    HEAP,
+    PIGEONHOLE
 };
 
-const static QVector<testAlgorithm> algorithms {
-    {"Buble", bubleSort},
-        {"Insertion", insertionSort},
-        {"Selection", selectSort},
-        {"Cycle", cycleSort},
-        {"Quick", quickSort},
-        {"Merge", mergeSort},
-        {"Gnome", gnomeSort},
-        {"Stooge", stoogeSort},
-        {"Heap", heapSort},
-        {"Pigeonhole", pigeonholeSort}
+struct testResult {
+    const QVector<double> swaps;
+    const QVector<double> times;
+    ALGORITHMS algorithm;
 };
 
 class TestThread : public QThread
 {
     Q_OBJECT
     public:
-        TestThread(const MainWindow *window, QObject *parent = nullptr);
-        void setData(std::vector<int> vectors);
+        TestThread(QObject *parent = nullptr);
+        void setData(std::vector<std::vector<int>> vectors);
+        void enableAlgorithm(ALGORITHMS algorithm, const bool enable = true);
+        void setIterationsCount(const int &count);
+        void setDelay(const int &delay);
+        static QString algorithmName(ALGORITHMS algorithm);
+        static SortFunction algorithmFunction(ALGORITHMS algorithm);
+        static ALGORITHMS algorithmFromString(const QString &name);
 
     signals:
         void started();
-        void finished(testResults results);
+        void finished(std::vector<testResult> results);
 
         void progressValChanged(const int &val);
         void progressTextChanged(const QString &text);
@@ -54,13 +55,11 @@ class TestThread : public QThread
     protected:
         void run() override;
     private:
-        testResults startTest();
-        testResult testAlg(const QVector<double> &keys, const testAlgorithm &alg, int &progress);
+        std::vector<testResult> startTest();
+        testResult testAlg(ALGORITHMS algorithm, int &progress);
 
         int m_delay = 0;
         int m_itCount = 0;
-        std::vector<int> m_vectors;
-        
-
-        const MainWindow *m_window;
+        std::vector<std::vector<int>> m_vectors;
+        std::map<ALGORITHMS, bool> m_enabled;
 };

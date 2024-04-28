@@ -23,11 +23,8 @@ add_custom_target(translations ALL DEPENDS ${TSR_FILES})
 file(GLOB ALGORITHM_THREADS "./algorithmThreads/*.cpp")
 
 add_library(${PROJECT_NAME} STATIC
-    MainWindow.cpp
+    mainWindow.cpp
     widgets.cpp
-    visual.cpp
-    algorithmThread.cpp
-    visualWidget.cpp
     changeLangDialog.cpp
     model.cpp
     testThread.cpp

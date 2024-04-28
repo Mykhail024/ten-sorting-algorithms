@@ -9,7 +9,7 @@ const size_t bozoSort(std::vector<int> &vec);
 
 const size_t bubleSort(std::vector<int> &vec);
 const size_t insertionSort(std::vector<int> &vec);
-const size_t selectSort(std::vector<int> &vec);
+const size_t selectionSort(std::vector<int> &vec);
 const size_t cycleSort(std::vector<int> &vec);
 const size_t quickSort(std::vector<int> &vec);
 const size_t mergeSort(std::vector<int> &vec);

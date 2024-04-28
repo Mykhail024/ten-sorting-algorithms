@@ -94,7 +94,7 @@ const size_t insertionSort(std::vector<int> &vec)
     return count;
 }
 
-const size_t selectSort(std::vector<int> &vec)
+const size_t selectionSort(std::vector<int> &vec)
 {
     if(vec.size() < 2) return 0;
     size_t count = 0;

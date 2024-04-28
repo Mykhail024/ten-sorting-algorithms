@@ -27,94 +27,93 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.cpp" line="60"/>
+        <location filename="../mainWindow.cpp" line="62"/>
         <source>Test</source>
         <translation>Test</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="69"/>
         <source>Visual</source>
-        <translation>Visual</translation>
+        <translation type="vanished">Visual</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="71"/>
+        <location filename="../mainWindow.cpp" line="71"/>
         <source>Change Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="74"/>
+        <location filename="../mainWindow.cpp" line="74"/>
         <source>Sorting Benchmark</source>
         <translation>Sorting Benchmark</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="88"/>
+        <location filename="../mainWindow.cpp" line="88"/>
         <source>Press test</source>
         <translation>Press test</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="93"/>
+        <location filename="../mainWindow.cpp" line="94"/>
         <source>Data source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="95"/>
+        <location filename="../mainWindow.cpp" line="63"/>
         <source>Numbers on first array</source>
         <translation>Numbers on first array</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="97"/>
+        <location filename="../mainWindow.cpp" line="64"/>
         <source>Numbers on last array</source>
         <translation>Numbers on last array</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="99"/>
+        <location filename="../mainWindow.cpp" line="65"/>
         <source>Min number in array</source>
         <translation>Min number in array</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="101"/>
+        <location filename="../mainWindow.cpp" line="66"/>
         <source>Max number in array</source>
         <translation>Max number in array</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="103"/>
+        <location filename="../mainWindow.cpp" line="67"/>
         <source>Step</source>
         <translation>Step</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="106"/>
+        <location filename="../mainWindow.cpp" line="68"/>
         <source>Iteration Count</source>
         <translation>Iteration Count</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="138"/>
+        <location filename="../mainWindow.cpp" line="135"/>
         <source>Graph</source>
         <translation>Graph</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="139"/>
+        <location filename="../mainWindow.cpp" line="136"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="226"/>
-        <location filename="../MainWindow.cpp" line="230"/>
+        <location filename="../mainWindow.cpp" line="244"/>
+        <location filename="../mainWindow.cpp" line="248"/>
         <source>Swaps count</source>
         <translation>Swaps count</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="227"/>
-        <location filename="../MainWindow.cpp" line="238"/>
+        <location filename="../mainWindow.cpp" line="245"/>
+        <location filename="../mainWindow.cpp" line="256"/>
         <source>Digits in Vector</source>
         <translation>Digits in Vector</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="237"/>
+        <location filename="../mainWindow.cpp" line="255"/>
         <source>Time (nanoseconds)</source>
         <translation>Time (nanoseconds)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="241"/>
+        <location filename="../mainWindow.cpp" line="259"/>
         <source>Wasted time</source>
         <translation>Wasted time</translation>
     </message>
@@ -123,12 +122,12 @@
         <translation type="vanished">Numbers count</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="306"/>
+        <location filename="../mainWindow.cpp" line="329"/>
         <source>Swaps</source>
         <translation>Swaps</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="307"/>
+        <location filename="../mainWindow.cpp" line="330"/>
         <source>Time</source>
         <translation>Time</translation>
     </message>
@@ -162,7 +161,7 @@
         <translation type="vanished">Testing finished!</translation>
     </message>
     <message>
-        <location filename="../testThread.cpp" line="40"/>
+        <location filename="../testThread.cpp" line="52"/>
         <source>Testing %1 (%2 of %3)</source>
         <translation>Testing %1 (%2 of %3)</translation>
     </message>
@@ -170,22 +169,22 @@
 <context>
     <name>TimeColDelegate</name>
     <message>
-        <location filename="../MainWindow.cpp" line="40"/>
+        <location filename="../mainWindow.cpp" line="42"/>
         <source>%1 s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="42"/>
+        <location filename="../mainWindow.cpp" line="44"/>
         <source>%1 ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="44"/>
+        <location filename="../mainWindow.cpp" line="46"/>
         <source>%1 us</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="46"/>
+        <location filename="../mainWindow.cpp" line="48"/>
         <source>%1 ns</source>
         <translation type="unfinished"></translation>
     </message>
@@ -193,29 +192,20 @@
 <context>
     <name>VisualWidget</name>
     <message>
-        <location filename="../visualWidget.cpp" line="18"/>
         <source>Start</source>
-        <translation>Start</translation>
+        <translation type="vanished">Start</translation>
     </message>
     <message>
-        <location filename="../visualWidget.cpp" line="21"/>
         <source>Visual</source>
-        <translation>Visual</translation>
+        <translation type="vanished">Visual</translation>
     </message>
     <message>
-        <location filename="../visualWidget.cpp" line="28"/>
-        <source>Algorithm:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../visualWidget.cpp" line="30"/>
         <source>Count:</source>
-        <translation>Count:</translation>
+        <translation type="vanished">Count:</translation>
     </message>
     <message>
-        <location filename="../visualWidget.cpp" line="32"/>
         <source>Delay:</source>
-        <translation>Delay:</translation>
+        <translation type="vanished">Delay:</translation>
     </message>
 </context>
 </TS>

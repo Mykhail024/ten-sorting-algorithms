@@ -13,6 +13,7 @@
 #include <QTableView>
 #include <QTableWidget>
 #include <QItemDelegate>
+#include <memory>
 
 #include "testThread.h"
 
@@ -41,17 +42,59 @@ class MainWindow : public QWidget
 
     public slots:
         void test();
-        void testEnd(testResults results);
+        void testEnd(std::vector<testResult> results);
         void validateInt(const QString &text);
 
     private slots:
         void onGraphLegendClicked(QCPLegend *legend, QCPAbstractLegendItem *legendItem, QMouseEvent *event);
         void onSourceChanged(const int &source);
+        void onAlgorithmEnable(const int &state);
 
     private:
         friend TestThread;
 
         void setControlsEnabled(const bool &val);
+        void setRandomSourceControlsVisible(const bool &val);
+        void setTextFileSourceControlsVisible(const bool &val);
+
+        struct InputWitchLabel {
+            QLineEdit *lineEdit = nullptr;
+            QLabel *label = nullptr;
+
+            void setEnabled(const bool &val)
+            {
+                lineEdit->setEnabled(val);
+                label->setEnabled(val);
+            }
+
+            void setVisible(const bool &val)
+            {
+                lineEdit->setVisible(val);
+                label->setVisible(val);
+            }
+
+            void addToLayout(QLayout *layout)
+            {
+                layout->addWidget(label);
+                layout->addWidget(lineEdit);
+            }
+            
+            void setValidator(QValidator *validator) 
+            {
+                lineEdit->setValidator(validator);
+            }
+
+            InputWitchLabel(QString text, QWidget *parent)
+                : lineEdit(new QLineEdit(parent))
+                , label(new QLabel(text, parent))
+            {}
+
+            ~InputWitchLabel()
+            {
+                delete lineEdit;
+                delete label;
+            }
+        };
 
         QComboBox *m_dataSource;
 
@@ -59,17 +102,15 @@ class MainWindow : public QWidget
         QVBoxLayout *m_left;
         QVBoxLayout *m_right;
 
-        QPushButton *m_testButton;
-        QLineEdit *m_iterationsCount;
-        QLineEdit *m_startIt;
-        QLineEdit *m_endIt;
-        QLineEdit *m_stepIt;
-        QLineEdit *m_min;
-        QLineEdit *m_max;
-        QProgressBar *m_progressBar;
+        std::unique_ptr<InputWitchLabel> m_iterationsCount;
+        std::unique_ptr<InputWitchLabel> m_startIt;
+        std::unique_ptr<InputWitchLabel> m_endIt;
+        std::unique_ptr<InputWitchLabel> m_stepIt;
+        std::unique_ptr<InputWitchLabel> m_min;
+        std::unique_ptr<InputWitchLabel> m_max;
 
-        VisualWidget *m_vis;
-        QPushButton *m_visBtn;
+        QProgressBar *m_progressBar;
+        QPushButton *m_testButton;
 
         QCustomPlot *m_SwapsPlot = nullptr;
         QCustomPlot *m_TimesPlot = nullptr;

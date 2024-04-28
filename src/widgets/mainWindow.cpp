@@ -8,24 +8,26 @@
 #include <QHBoxLayout>
 #include <QSpacerItem>
 #include <QTableView>
+#include <QHeaderView>
 
 #include <climits>
-#include <qheaderview.h>
+#include <random>
+#include <ctime>
 
+#include "Log.h"
 #include "qcustomplot.h"
 #include "model.h"
 #include "sort.h"
 #include "testThread.h"
 #include "changeLangDialog.h"
 
-#include "visualWidget.h"
-#include "MainWindow.h"
+#include "mainWindow.h"
 
 const QVector<QColor> colors = {"black", "red", "blue", "#30f930", "purple", "orange", "brown", "gray", "green", "#7f1212"};
 
 enum SOURCE {
-    FROM_TEXT_FILE = 0,
-    RANDOM_GENERATED = 1
+    RANDOM_GENERATED,
+    FROM_TEXT_FILE
 };
 
 TimeColDelegate::TimeColDelegate(QObject *parent) : QItemDelegate(parent)
@@ -58,16 +60,14 @@ MainWindow::MainWindow()
     , m_tabGraphs(new QTabWidget(this))
     , m_tabTables(new QTabWidget(this))
     , m_testButton(new QPushButton(tr("Test"), this))
-    , m_startIt(new QLineEdit(this))
-    , m_endIt(new QLineEdit(this))
-    , m_min(new QLineEdit(this))
-    , m_max(new QLineEdit(this))
-    , m_stepIt(new QLineEdit(this))
-    , m_iterationsCount(new QLineEdit(this))
+    , m_startIt(std::make_unique<InputWitchLabel>(tr("Numbers on first array"), this))
+    , m_endIt(std::make_unique<InputWitchLabel>(tr("Numbers on last array"), this))
+    , m_min(std::make_unique<InputWitchLabel>(tr("Min number in array"), this))
+    , m_max(std::make_unique<InputWitchLabel>(tr("Max number in array"), this))
+    , m_stepIt(std::make_unique<InputWitchLabel>(tr("Step"), this))
+    , m_iterationsCount(std::make_unique<InputWitchLabel>(tr("Iteration Count"), this))
     , m_progressBar(new QProgressBar(this))
-    , m_testThread(new TestThread(this, this))
-    , m_visBtn(new QPushButton(tr("Visual"), this))
-    , m_vis(new VisualWidget())
+    , m_testThread(new TestThread(this))
     , m_settingsBtn(new QPushButton(tr("Change Language"), this))
     , m_dataSource(new QComboBox(this))
 {
@@ -82,7 +82,7 @@ MainWindow::MainWindow()
     m_min->setValidator(validator);
     m_max->setValidator(validator);
 
-    m_dataSource->addItems({"Text file", "Random generate"});
+    m_dataSource->addItems({"Random generate", "Text file"});
 
     m_progressBar->setTextVisible(true);
     m_progressBar->setFormat(tr("Press test"));
@@ -90,21 +90,16 @@ MainWindow::MainWindow()
     m_progressBar->setMinimum(0);
     m_progressBar->setMaximum(1);
     m_progressBar->setValue(1);
+
     m_right->addWidget(new QLabel(tr("Data source"), this));
     m_right->addWidget(m_dataSource);
-    m_right->addWidget(new QLabel(tr("Numbers on first array"), this));
-    m_right->addWidget(m_startIt);
-    m_right->addWidget(new QLabel(tr("Numbers on last array"), this));
-    m_right->addWidget(m_endIt);
-    m_right->addWidget(new QLabel(tr("Min number in array"), this));
-    m_right->addWidget(m_min);
-    m_right->addWidget(new QLabel(tr("Max number in array"), this));
-    m_right->addWidget(m_max);
-    m_right->addWidget(new QLabel(tr("Step"), this));
-    m_right->addWidget(m_stepIt);
+    m_startIt->addToLayout(m_right);
+    m_endIt->addToLayout(m_right);
+    m_min->addToLayout(m_right);
+    m_max->addToLayout(m_right);
+    m_stepIt->addToLayout(m_right);
 
-    m_right->addWidget(new QLabel(tr("Iteration Count"), this));
-    m_right->addWidget(m_iterationsCount);
+    m_iterationsCount->addToLayout(m_right);
 
     QVBoxLayout *checkbox_l = new QVBoxLayout();
     QVBoxLayout *checkbox_r = new QVBoxLayout();
@@ -113,11 +108,14 @@ MainWindow::MainWindow()
     checkbox->addLayout(checkbox_r);
     m_right->addLayout(checkbox);
 
-    for(int i = 0; i < algorithms.size(); i++) {
-        auto w = new QCheckBox(algorithms[i].name, this);
-        m_checkboxes[algorithms[i].name] = w;
+    for(int i = 1; i < ALGORITHMS_COUNT; i++) {
+        const QString name = TestThread::algorithmName(static_cast<ALGORITHMS>(i));
+        auto w = new QCheckBox(name, this);
+        w->setProperty("index", i);
+        connect(w, &QCheckBox::stateChanged, this, &MainWindow::onAlgorithmEnable);
+        m_checkboxes[name] = w;
 
-        if(i < algorithms.size()/2) {
+        if(i < ALGORITHMS_COUNT/2) {
             checkbox_l->addWidget(w);
         } else {
             checkbox_r->addWidget(w);
@@ -129,7 +127,6 @@ MainWindow::MainWindow()
     m_right->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_right->addWidget(m_progressBar);
     m_right->addWidget(m_testButton, 0, Qt::AlignTop);
-    m_right->addWidget(m_visBtn, 0, Qt::AlignTop);
     m_right->addWidget(m_settingsBtn, 0, Qt::AlignTop);
 
     m_main->addLayout(m_left, 1);
@@ -145,12 +142,8 @@ MainWindow::MainWindow()
     connect(m_testThread, &TestThread::progressTextChanged, m_progressBar, &QProgressBar::setFormat);
     connect(m_testThread, &TestThread::progressMaxValChanged, m_progressBar, &QProgressBar::setMaximum);
 
-    connect(m_min, &QLineEdit::textChanged, this, &MainWindow::validateInt);
-    connect(m_max, &QLineEdit::textChanged, this, &MainWindow::validateInt);
-
-    connect(m_visBtn, &QPushButton::clicked, [&]{
-                m_vis->show();
-            });
+    connect(m_min->lineEdit, &QLineEdit::textChanged, this, &MainWindow::validateInt);
+    connect(m_max->lineEdit, &QLineEdit::textChanged, this, &MainWindow::validateInt);
 
     connect(m_settingsBtn, &QPushButton::clicked, [&]{
                 ChangeLangDialog d(this);
@@ -165,7 +158,6 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-    delete m_vis;
     m_testThread->terminate();
     delete m_testThread;
 }
@@ -173,9 +165,12 @@ MainWindow::~MainWindow()
 void MainWindow::onSourceChanged(const int &source)
 {
     if(source == RANDOM_GENERATED) {
-        
-    } else if (source == FROM_TEXT_FILE) {
+        setTextFileSourceControlsVisible(false);
+        setRandomSourceControlsVisible(true);
 
+    } else if (source == FROM_TEXT_FILE) {
+        setRandomSourceControlsVisible(false);
+        setTextFileSourceControlsVisible(true);
     }
 }
 
@@ -192,22 +187,45 @@ void MainWindow::test()
 {
     const int sourceIndex = m_dataSource->currentIndex();
     if(sourceIndex == RANDOM_GENERATED) {
-        if(m_iterationsCount->text().isEmpty()
-                || m_startIt->text().isEmpty()
-                || m_endIt->text().isEmpty()
-                || m_stepIt->text().isEmpty()
-                || m_min->text().isEmpty()
-                || m_max->text().isEmpty()
+        if(m_iterationsCount->lineEdit->text().isEmpty()
+                || m_startIt->lineEdit->text().isEmpty()
+                || m_endIt->lineEdit->text().isEmpty()
+                || m_stepIt->lineEdit->text().isEmpty()
+                || m_min->lineEdit->text().isEmpty()
+                || m_max->lineEdit->text().isEmpty()
           ) return;
-    } else if (sourceIndex == FROM_TEXT_FILE) {
-    }
 
-    m_testThread->start(QThread::HighestPriority);
+        const int itCount = m_iterationsCount->lineEdit->text().toInt();
+        const int start = m_startIt->lineEdit->text().toInt();
+        const int end = m_endIt->lineEdit->text().toInt();
+        const int step = m_stepIt->lineEdit->text().toInt();
+
+        const int numVectors = ((end - start) / step) + 1;
+        std::default_random_engine generator(time(0));
+
+        std::vector<std::vector<int>> vec(numVectors);
+
+        for (int i = 0; i < numVectors; ++i) {
+            int currentSize = start + i * step;
+            vec[i].resize(currentSize);
+            std::uniform_int_distribution<int> distribution(0, currentSize - 1);
+            for (int j = 0; j < currentSize; ++j) {
+                vec[i][j] = distribution(generator);
+            }
+        }
+
+        m_testThread->setData(vec);
+        m_testThread->setIterationsCount(itCount);
+        m_testThread->start(QThread::HighestPriority);
+    } else if (sourceIndex == FROM_TEXT_FILE) {
+        m_testThread->start(QThread::HighestPriority);
+    }
 }
 
 
-void MainWindow::testEnd(testResults results)
+void MainWindow::testEnd(std::vector<testResult> results)
 {
+    Log_Debug("Test Finished");
     if(m_SwapsPlot) {
         m_SwapsPlot->deleteLater();
     }
@@ -242,19 +260,24 @@ void MainWindow::testEnd(testResults results)
     m_TimesPlot->setInteraction(QCP::iRangeZoom, true);
     m_TimesPlot->setInteraction(QCP::iRangeDrag, true);
 
+    QVector<double> keys;
+    for(size_t i = 0; i < results[results.size()-1].swaps.size(); ++i){
+        keys.push_back(i);
+    }
+
     int colorIt = 0;
-    for(const auto &vec : results.results) {
+    for(const auto &r : results) {
         m_SwapsPlot->addGraph();
         auto i = m_SwapsPlot->graphCount()-1;
         m_SwapsPlot->graph(i)->setPen(QPen(colors[colorIt], 2));
-        m_SwapsPlot->graph(i)->setData(results.keys, vec.swaps, true);
-        m_SwapsPlot->graph(i)->setName(vec.name);
+        m_SwapsPlot->graph(i)->setData(keys, r.swaps);
+        m_SwapsPlot->graph(i)->setName(TestThread::algorithmName(r.algorithm));
 
         m_TimesPlot->addGraph();
         i = m_TimesPlot->graphCount()-1;
         m_TimesPlot->graph(i)->setPen(QPen(colors[colorIt], 2));
-        m_TimesPlot->graph(i)->setData(results.keys, vec.time, true);
-        m_TimesPlot->graph(i)->setName(vec.name);
+        m_TimesPlot->graph(i)->setData(keys, r.times);
+        m_TimesPlot->graph(i)->setName(TestThread::algorithmName(r.algorithm));
 
         ++colorIt;
     }
@@ -285,12 +308,12 @@ void MainWindow::testEnd(testResults results)
     connect(m_SwapsPlot, &QCustomPlot::legendClick, this, &MainWindow::onGraphLegendClicked);
     connect(m_TimesPlot, &QCustomPlot::legendClick, this, &MainWindow::onGraphLegendClicked);
 
-    const size_t rows = results.keys.size();
-    for(const auto result : results.results) {
+    const size_t rows = results.size();
+    for(const auto r : results) {
         auto table = new QTableView(this);
         auto model = new Model(table);
 
-        model->setData({.keys = results.keys, .swaps = result.swaps, .time = result.time});
+        model->setData({.keys = keys, .swaps = r.swaps, .time = r.times});
         table->setModel(model);
         table->setItemDelegateForColumn(model->columnCount()-1, m_timeColDelegate);
         table->verticalHeader()->setVisible(false);
@@ -300,7 +323,7 @@ void MainWindow::testEnd(testResults results)
         table->resizeColumnsToContents();
 
         m_tables.push_back(table);
-        m_tabTables->addTab(table, result.name);
+        m_tabTables->addTab(table, TestThread::algorithmName(r.algorithm));
     }
 
     m_tabGraphs->addTab(m_SwapsPlot, tr("Swaps"));
@@ -333,8 +356,29 @@ void MainWindow::setControlsEnabled(const bool &val)
     m_stepIt->setEnabled(val);
     m_max->setEnabled(val);
     m_min->setEnabled(val);
+    m_dataSource->setEnabled(val);
 
     for(auto checkbox : m_checkboxes) {
         checkbox->setEnabled(val);
     }
+}
+
+void MainWindow::setRandomSourceControlsVisible(const bool &val)
+{
+    m_startIt->setVisible(val);
+    m_endIt->setVisible(val);
+    m_stepIt->setVisible(val);
+    m_min->setVisible(val);
+    m_max->setVisible(val);
+}
+
+void MainWindow::setTextFileSourceControlsVisible(const bool &val)
+{
+
+}
+
+void MainWindow::onAlgorithmEnable(const int &state)
+{
+    const int index = sender()->property("index").toInt();
+    m_testThread->enableAlgorithm(static_cast<ALGORITHMS>(index), state);
 }
