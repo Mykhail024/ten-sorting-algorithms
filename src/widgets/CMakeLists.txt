@@ -28,6 +28,7 @@ add_library(${PROJECT_NAME} STATIC
     changeLangDialog.cpp
     model.cpp
     testThread.cpp
+    randomSourceModel.cpp
 
     ${ALGORITHM_THREADS}
     ${TSR_FILES}
