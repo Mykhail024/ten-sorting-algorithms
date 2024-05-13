@@ -157,7 +157,7 @@ const size_t cycleSort(std::vector<int> &vec)
 
 const size_t _part(std::vector<int> &vec, const size_t &start, const size_t &end, size_t &count)
 {
-    auto pivot = vec[end];
+    auto pivot = vec[(start + end) / 2];
     size_t i = start;
 
     for(size_t j = start; j <= end - 1; ++j) {
