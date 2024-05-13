@@ -2,9 +2,10 @@
 #include <QTranslator>
 #include <QSettings>
 #include <QProcess>
+#include <cstdlib>
+#include <ctime>
 
-#include "mainWindow.h"
-#include "widgets.h"
+#include "MainWindow.h"
 
 int _showApp(int argc, char **argv)
 {
@@ -21,9 +22,9 @@ int _showApp(int argc, char **argv)
     QTranslator translator;
     if(translator.load(translationFile)) {
         app.installTranslator(&translator);
-        qDebug() << "Language" << lang;
+        Log_Info("Language: " + lang);
     } else {
-        qDebug() << "No translation file:" << translationFile;
+        Log_Warning("No translation file: " + translationFile);
     }
 
     MainWindow window;
@@ -32,8 +33,9 @@ int _showApp(int argc, char **argv)
     return app.exec();
 }
 
-int showApp(int argc, char **argv)
-{
+using namespace std::chrono;
+int main(int argc, char **argv) {
+    srand(time(0));
     int exitCode = 0;
 
     exitCode = _showApp(argc, argv);

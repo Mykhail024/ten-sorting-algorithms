@@ -2,24 +2,85 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
+    <name>AbstractTestModel</name>
+    <message>
+        <location filename="../StandardTestModel.cpp" line="61"/>
+        <source>Testing %1 (%2 of %3)</source>
+        <translation type="unfinished">Testing %1 (%2 of %3)</translation>
+    </message>
+</context>
+<context>
+    <name>AlgorithmHandler</name>
+    <message>
+        <location filename="../AlgorithmHandler.cpp" line="10"/>
+        <source>Buble</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AlgorithmHandler.cpp" line="11"/>
+        <source>Insertion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AlgorithmHandler.cpp" line="12"/>
+        <source>Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AlgorithmHandler.cpp" line="13"/>
+        <source>Cycle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AlgorithmHandler.cpp" line="14"/>
+        <source>Quick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AlgorithmHandler.cpp" line="15"/>
+        <source>Merge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AlgorithmHandler.cpp" line="16"/>
+        <source>Heap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AlgorithmHandler.cpp" line="17"/>
+        <source>Gnome</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AlgorithmHandler.cpp" line="18"/>
+        <source>Stooge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AlgorithmHandler.cpp" line="19"/>
+        <source>Pigeonhole</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ChangeLangDialog</name>
     <message>
-        <location filename="../changeLangDialog.cpp" line="18"/>
+        <location filename="../ChangeLangDialog.cpp" line="18"/>
         <source>Accept</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../changeLangDialog.cpp" line="19"/>
+        <location filename="../ChangeLangDialog.cpp" line="19"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../changeLangDialog.cpp" line="21"/>
+        <location filename="../ChangeLangDialog.cpp" line="21"/>
         <source>Change Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../changeLangDialog.cpp" line="22"/>
+        <location filename="../ChangeLangDialog.cpp" line="22"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
@@ -27,7 +88,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainWindow.cpp" line="62"/>
+        <location filename="../MainWindow.cpp" line="39"/>
         <source>Test</source>
         <translation>Test</translation>
     </message>
@@ -36,84 +97,87 @@
         <translation type="vanished">Visual</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="71"/>
+        <location filename="../MainWindow.cpp" line="42"/>
         <source>Change Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="74"/>
+        <location filename="../MainWindow.cpp" line="51"/>
         <source>Sorting Benchmark</source>
         <translation>Sorting Benchmark</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="88"/>
+        <location filename="../MainWindow.cpp" line="57"/>
         <source>Press test</source>
         <translation>Press test</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="94"/>
+        <location filename="../MainWindow.cpp" line="63"/>
         <source>Data source</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="63"/>
         <source>Numbers on first array</source>
-        <translation>Numbers on first array</translation>
+        <translation type="vanished">Numbers on first array</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="64"/>
         <source>Numbers on last array</source>
-        <translation>Numbers on last array</translation>
+        <translation type="vanished">Numbers on last array</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="65"/>
         <source>Min number in array</source>
-        <translation>Min number in array</translation>
+        <translation type="vanished">Min number in array</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="66"/>
         <source>Max number in array</source>
-        <translation>Max number in array</translation>
+        <translation type="vanished">Max number in array</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="67"/>
         <source>Step</source>
-        <translation>Step</translation>
+        <translation type="vanished">Step</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="68"/>
         <source>Iteration Count</source>
-        <translation>Iteration Count</translation>
+        <translation type="vanished">Iteration Count</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="135"/>
+        <location filename="../MainWindow.cpp" line="66"/>
+        <source>Iteration count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="87"/>
         <source>Graph</source>
         <translation>Graph</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="136"/>
+        <location filename="../MainWindow.cpp" line="88"/>
         <source>Table</source>
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="244"/>
-        <location filename="../mainWindow.cpp" line="248"/>
+        <location filename="../MainWindow.cpp" line="201"/>
+        <location filename="../MainWindow.cpp" line="203"/>
+        <source>Numbers in array</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="202"/>
+        <location filename="../MainWindow.cpp" line="205"/>
         <source>Swaps count</source>
         <translation>Swaps count</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="245"/>
-        <location filename="../mainWindow.cpp" line="256"/>
         <source>Digits in Vector</source>
-        <translation>Digits in Vector</translation>
+        <translation type="vanished">Digits in Vector</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="255"/>
+        <location filename="../MainWindow.cpp" line="200"/>
         <source>Time (nanoseconds)</source>
         <translation>Time (nanoseconds)</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="259"/>
+        <location filename="../MainWindow.cpp" line="206"/>
         <source>Wasted time</source>
         <translation>Wasted time</translation>
     </message>
@@ -122,12 +186,12 @@
         <translation type="vanished">Numbers count</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="329"/>
+        <location filename="../MainWindow.cpp" line="218"/>
         <source>Swaps</source>
         <translation>Swaps</translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="330"/>
+        <location filename="../MainWindow.cpp" line="219"/>
         <source>Time</source>
         <translation>Time</translation>
     </message>
@@ -135,17 +199,82 @@
 <context>
     <name>Model</name>
     <message>
-        <location filename="../model.cpp" line="34"/>
+        <source>Numbers count</source>
+        <translation type="obsolete">Numbers count</translation>
+    </message>
+    <message>
+        <source>Swaps</source>
+        <translation type="obsolete">Swaps</translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="obsolete">Time</translation>
+    </message>
+</context>
+<context>
+    <name>RandomSourceModel</name>
+    <message>
+        <location filename="../RandomSourceModel.cpp" line="236"/>
+        <source>Random generated</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RandomSourceWidget</name>
+    <message>
+        <location filename="../RandomSourceModel.cpp" line="38"/>
+        <source>Numbers on first array</source>
+        <translation type="unfinished">Numbers on first array</translation>
+    </message>
+    <message>
+        <location filename="../RandomSourceModel.cpp" line="40"/>
+        <source>Numbers on last array</source>
+        <translation type="unfinished">Numbers on last array</translation>
+    </message>
+    <message>
+        <location filename="../RandomSourceModel.cpp" line="42"/>
+        <source>Min number in array</source>
+        <translation type="unfinished">Min number in array</translation>
+    </message>
+    <message>
+        <location filename="../RandomSourceModel.cpp" line="44"/>
+        <source>Max number in array</source>
+        <translation type="unfinished">Max number in array</translation>
+    </message>
+    <message>
+        <location filename="../RandomSourceModel.cpp" line="46"/>
+        <source>Step</source>
+        <translation type="unfinished">Step</translation>
+    </message>
+</context>
+<context>
+    <name>StandardTestModel</name>
+    <message>
+        <source>Testing %1 (%2 of %3)</source>
+        <translation type="obsolete">Testing %1 (%2 of %3)</translation>
+    </message>
+</context>
+<context>
+    <name>StandardTestThread</name>
+    <message>
+        <source>Testing %1 (%2 of %3)</source>
+        <translation type="obsolete">Testing %1 (%2 of %3)</translation>
+    </message>
+</context>
+<context>
+    <name>TableModel</name>
+    <message>
+        <location filename="../TableModel.cpp" line="34"/>
         <source>Numbers count</source>
         <translation type="unfinished">Numbers count</translation>
     </message>
     <message>
-        <location filename="../model.cpp" line="35"/>
+        <location filename="../TableModel.cpp" line="35"/>
         <source>Swaps</source>
         <translation type="unfinished">Swaps</translation>
     </message>
     <message>
-        <location filename="../model.cpp" line="36"/>
+        <location filename="../TableModel.cpp" line="36"/>
         <source>Time</source>
         <translation type="unfinished">Time</translation>
     </message>
@@ -161,30 +290,29 @@
         <translation type="vanished">Testing finished!</translation>
     </message>
     <message>
-        <location filename="../testThread.cpp" line="52"/>
         <source>Testing %1 (%2 of %3)</source>
-        <translation>Testing %1 (%2 of %3)</translation>
+        <translation type="vanished">Testing %1 (%2 of %3)</translation>
     </message>
 </context>
 <context>
     <name>TimeColDelegate</name>
     <message>
-        <location filename="../mainWindow.cpp" line="42"/>
+        <location filename="../TableView.cpp" line="14"/>
         <source>%1 s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="44"/>
+        <location filename="../TableView.cpp" line="16"/>
         <source>%1 ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="46"/>
+        <location filename="../TableView.cpp" line="18"/>
         <source>%1 us</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainWindow.cpp" line="48"/>
+        <location filename="../TableView.cpp" line="20"/>
         <source>%1 ns</source>
         <translation type="unfinished"></translation>
     </message>

@@ -2,7 +2,7 @@
 
 #include <QAbstractTableModel>
 
-class Model : public QAbstractTableModel
+class TableModel : public QAbstractTableModel
 {
     Q_OBJECT
     public:
@@ -12,7 +12,7 @@ class Model : public QAbstractTableModel
             QVector<double> time;
         };
 
-        Model(QObject *parent = nullptr);
+        TableModel(QObject *parent = nullptr);
 
         bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex()) override;
 

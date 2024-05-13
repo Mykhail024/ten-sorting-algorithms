@@ -1,12 +1,12 @@
-#include "model.h"
+#include "TableModel.h"
 
-Model::Model(QObject *parent)
+TableModel::TableModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
 
 }
 
-bool Model::removeRows(int position, int rows, const QModelIndex &index)
+bool TableModel::removeRows(int position, int rows, const QModelIndex &index)
 {
     if(position < 0 || position > m_data.keys.size() || position+rows > m_data.keys.size()) return false;
 
@@ -17,17 +17,17 @@ bool Model::removeRows(int position, int rows, const QModelIndex &index)
     return true;
 }
 
-int Model::rowCount(const QModelIndex &parent) const
+int TableModel::rowCount(const QModelIndex &parent) const
 {
     return parent.isValid() ? 0 : m_data.keys.size();
 }
 
-int Model::columnCount(const QModelIndex &parent) const
+int TableModel::columnCount(const QModelIndex &parent) const
 {
     return parent.isValid() ? 0 : 3;
 }
 
-QVariant Model::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if(orientation != Qt::Horizontal) return QVariant();
     if(role == Qt::DisplayRole) {
@@ -38,7 +38,7 @@ QVariant Model::headerData(int section, Qt::Orientation orientation, int role) c
     return QVariant();
 }
 
-Qt::ItemFlags Model::flags(const QModelIndex &index) const
+Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid()) {
         return Qt::ItemIsEnabled | Qt::ItemIsEditable;
@@ -47,7 +47,7 @@ Qt::ItemFlags Model::flags(const QModelIndex &index) const
     return QAbstractTableModel::flags(index);
 }
 
-QVariant Model::data(const QModelIndex &index, int role) const
+QVariant TableModel::data(const QModelIndex &index, int role) const
 {
     if(role == Qt::DisplayRole) {
         const auto column = index.column();
@@ -66,7 +66,7 @@ QVariant Model::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-void Model::setData(const modelData data)
+void TableModel::setData(const modelData data)
 {
     beginResetModel();
     m_data = data;
