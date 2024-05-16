@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 
 project(${PROJECT_NAME})
 
-find_package(Qt6 COMPONENTS Core Widgets Concurrent LinguistTools REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets LinguistTools REQUIRED)
 
 set(PCH_HEADERS precompile.h)
 
@@ -46,6 +46,6 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE ${PCH_HEADERS})
 target_include_directories(${PROJECT_NAME} PUBLIC .)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/src)
 
-target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Widgets Qt6::Concurrent qcustomplot sort.algoritms)
+target_link_libraries(${PROJECT_NAME} Qt6::Core Qt6::Widgets qcustomplot sort.algoritms)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
