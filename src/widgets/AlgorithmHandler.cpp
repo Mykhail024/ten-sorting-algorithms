@@ -7,7 +7,7 @@
 AlgorithmHandler::AlgorithmHandler()
     : QObject()
     , m_algorithms({
-        {{bubleSort, tr("Buble")}, false},
+        {{bubbleSort, tr("Bubble")}, false},
         {{insertionSort, tr("Insertion")}, false},
         {{selectionSort, tr("Selection")}, false},
         {{cycleSort, tr("Cycle")}, false},

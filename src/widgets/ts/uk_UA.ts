@@ -12,8 +12,12 @@
 <context>
     <name>AlgorithmHandler</name>
     <message>
-        <location filename="../AlgorithmHandler.cpp" line="10"/>
         <source>Buble</source>
+        <translation type="vanished">Бульбашкове</translation>
+    </message>
+    <message>
+        <location filename="../AlgorithmHandler.cpp" line="10"/>
+        <source>Bubble</source>
         <translation>Бульбашкове</translation>
     </message>
     <message>

@@ -60,7 +60,7 @@ const size_t bozoSort(std::vector<int> &vec)
     return count;
 }
 
-const size_t bubleSort(std::vector<int> &vec)
+const size_t bubbleSort(std::vector<int> &vec)
 {
     if(vec.size() < 2) return 0;
     size_t count = 0;

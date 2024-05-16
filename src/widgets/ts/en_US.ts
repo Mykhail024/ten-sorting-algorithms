@@ -13,7 +13,7 @@
     <name>AlgorithmHandler</name>
     <message>
         <location filename="../AlgorithmHandler.cpp" line="10"/>
-        <source>Buble</source>
+        <source>Bubble</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
