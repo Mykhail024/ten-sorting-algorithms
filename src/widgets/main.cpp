@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <ctime>
 
+#include "Log.h"
 #include "MainWindow.h"
 
 int _showApp(int argc, char **argv)

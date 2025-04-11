@@ -14,6 +14,7 @@ class TimeColDelegate : public QItemDelegate
 
 class TableView : public QTableView
 {
+    Q_OBJECT
     public:
         TableView(QWidget *parent = nullptr);
         void setModel(QAbstractItemModel *model);
